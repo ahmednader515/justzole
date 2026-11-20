@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;450;500;550;600;650;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;450;500;550;600;650;700;800&family=Fira+Code:wght@400;500;600&family=Orbitron:wght@500;600;700;800;900&display=swap");
 :root {
   color-scheme: dark;
   --bg: #09090b;
@@ -163,6 +163,17 @@ p {
   font-weight: 800;
   letter-spacing: 1px;
   line-height: 1.1;
+}
+.brand-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+.brand-small .brand-logo {
+  width: 44px;
+  height: 44px;
 }
 .brand b {
   color: var(--red);
@@ -1327,6 +1338,116 @@ p {
 @media (max-width: 520px) {
   .showcase-videos {
     grid-template-columns: 1fr;
+  }
+}
+.depth-scene {
+  perspective: 1200px;
+}
+.depth-scene [data-depth-card] {
+  --depth-x: 0;
+  --depth-y: 0;
+  --depth-light-x: 50%;
+  --depth-light-y: 50%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition:
+    transform 450ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 250ms,
+    box-shadow 350ms;
+}
+.depth-scene [data-depth-card][data-depth-active] {
+  z-index: 2;
+  transform: perspective(1000px) rotateX(calc(var(--depth-y) * -7deg))
+    rotateY(calc(var(--depth-x) * 8deg)) translateZ(8px);
+  transition:
+    transform 80ms linear,
+    border-color 250ms,
+    box-shadow 350ms;
+  border-color: #9a3546;
+  box-shadow:
+    0 18px 38px #0005,
+    0 0 26px #f02c3c0a;
+}
+.depth-scene .combat-card::before,
+.depth-scene .controller-card::before,
+.depth-scene .showcase-video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at var(--depth-light-x) var(--depth-light-y),
+    #ff61701c,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 300ms;
+}
+.depth-scene [data-depth-active]::before,
+.depth-scene [data-depth-active] .showcase-video::after {
+  opacity: 1;
+}
+.depth-scene .showcase-feature {
+  border-radius: 10px;
+}
+.depth-scene .showcase-feature[data-depth-active] {
+  box-shadow: none;
+}
+.depth-scene .showcase-video {
+  box-shadow:
+    0 6px 0 -3px #421c27,
+    0 14px 30px #0004;
+  transition:
+    border-color 250ms,
+    box-shadow 350ms;
+}
+.depth-scene [data-depth-active] .showcase-video {
+  border-color: #b7475b;
+  box-shadow:
+    0 8px 0 -3px #651e30,
+    0 24px 40px #0006;
+}
+.depth-scene .showcase-feature figcaption,
+.depth-scene .combat-card-copy,
+.depth-scene .controller-card-footer {
+  transform: translateZ(18px);
+}
+.depth-scene .combat-icon,
+.depth-scene .controller-stage img {
+  transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.depth-scene [data-depth-active] .combat-icon {
+  transform: translate3d(
+    calc(var(--depth-x) * 8px),
+    calc(var(--depth-y) * 8px),
+    28px
+  );
+}
+.depth-scene [data-depth-active] .controller-stage img {
+  transform: translate3d(
+      calc(var(--depth-x) * -12px),
+      calc(var(--depth-y) * -10px - 5px),
+      25px
+    )
+    scale(1.025);
+}
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .depth-scene {
+    perspective: none;
+  }
+  .depth-scene [data-depth-card],
+  .depth-scene [data-depth-card]:hover,
+  .depth-scene [data-depth-card] *,
+  .depth-scene [data-depth-card]::before,
+  .depth-scene .showcase-video::after {
+    transform: none;
+    transition: none;
+  }
+  .depth-scene [data-depth-card]::before,
+  .depth-scene .showcase-video::after {
+    display: none;
   }
 }
 .product-questions-grid {

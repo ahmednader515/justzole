@@ -1,3 +1,6 @@
+import Image from "next/image";
+import logo from "@/assets/logo.png";
+
 export function DiscordIcon({ size = 20 }: { size?: number }) {
   return (
     <svg
@@ -20,10 +23,14 @@ export function Brand({
 }) {
   return (
     <span className={`brand ${small ? "brand-small" : ""}`}>
-      <span className="brand-symbol">
-        {copy?.brandSymbol ?? "Z"}
-        <span>•</span>
-      </span>
+      <Image
+        className="brand-logo"
+        src={logo}
+        alt="Just Zole"
+        width={56}
+        height={56}
+        sizes="56px"
+      />
       <span>
         {copy?.brandFirst ?? "JUST"} <b>{copy?.brandLast ?? "ZOLE"}</b>
         <small>{copy?.brandTagline ?? "BUILT FOR THE ADVANTAGE"}</small>

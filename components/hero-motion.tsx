@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { CyberAtmosphere } from "./cyber-atmosphere";
 
 export function HeroMotion({ children }: { children: ReactNode }) {
   const heroRef = useRef<HTMLElement>(null);
@@ -76,6 +77,7 @@ export function HeroMotion({ children }: { children: ReactNode }) {
 
   return (
     <section ref={heroRef} className="hero-motion">
+      <CyberAtmosphere />
       <div ref={contentRef} className="hero container">
         {children}
       </div>

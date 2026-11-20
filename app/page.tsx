@@ -14,6 +14,7 @@ import { ProductShowcase } from "@/components/product-showcase";
 import { getCatalog } from "@/lib/products";
 import { getHomepageContent } from "@/lib/homepage";
 import { HeroMotion } from "@/components/hero-motion";
+import { HeroDashboard } from "@/components/hero-dashboard";
 import { Reviews } from "@/components/reviews";
 import { ServerRules } from "@/components/server-rules";
 import { HowToUse } from "@/components/how-to-use";
@@ -39,7 +40,7 @@ export default async function Home() {
   const community = content.community.text;
 
   return (
-    <>
+    <div className="cyber-site">
       <Header />
       <main>
         {content.hero.visible && (
@@ -79,28 +80,7 @@ export default async function Home() {
                 <span>{hero.note}</span>
               </div>
             </div>
-            <div className="hero-visual" aria-hidden="true">
-              <div className="visual-grid" />
-              <div className="visual-orbit orbit-1" />
-              <div className="visual-orbit orbit-2" />
-              <div className="visual-orbit orbit-3" />
-              <div className="visual-cross cross-one" />
-              <div className="visual-cross cross-two" />
-              <span className="visual-coordinate coordinate-top">
-                {hero.visualTop}
-              </span>
-              <div className="hero-z">
-                {hero.visualSymbol}
-                <span />
-              </div>
-              <div className="visual-label">
-                <span className="live-dot" />
-                {hero.visualLabel}
-              </div>
-              <span className="visual-coordinate coordinate-bottom">
-                {hero.visualBottom}
-              </span>
-            </div>
+            <HeroDashboard hero={hero} features={content.combatFeatures.text} />
           </HeroMotion>
         )}
         {content.benefits.visible && (
@@ -200,6 +180,6 @@ export default async function Home() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@ import { ArrowUpRight, Play } from "lucide-react";
 import { Brand, DiscordIcon } from "./icons";
 import { ProductVideo } from "./video";
 import type { CatalogProduct } from "./product-card";
+import { DepthScene } from "./depth-scene";
 
 export function ProductShowcase({
   products,
@@ -72,11 +73,11 @@ export function ProductShowcase({
           <ArrowUpRight size={15} />
         </Link>
       </div>
-      <div className="showcase-videos" aria-label="Product feature previews">
+      <DepthScene className="showcase-videos" label="Product feature previews">
         {(["first", "second", "third"] as const).map((key, index) => {
           const url = text[`${key}VideoUrl`];
           return (
-            <figure className="showcase-feature" key={key}>
+            <figure className="showcase-feature" key={key} data-depth-card>
               <div className="showcase-video">
                 {url ? (
                   <ProductVideo
@@ -101,7 +102,7 @@ export function ProductShowcase({
             </figure>
           );
         })}
-      </div>
+      </DepthScene>
     </section>
   );
 }

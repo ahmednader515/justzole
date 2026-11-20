@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DepthScene } from "./depth-scene";
 import {
   ArrowUpRight,
   Crosshair,
@@ -42,9 +43,13 @@ export function CombatFeatures({ text }: { text: Record<string, string> }) {
             </span>
           </div>
         </div>
-        <div className="combat-grid">
+        <DepthScene className="combat-grid">
           {features.map(({ key, label, Icon }, index) => (
-            <article className={`combat-card combat-card-${key}`} key={key}>
+            <article
+              className={`combat-card combat-card-${key}`}
+              key={key}
+              data-depth-card
+            >
               <div className="combat-card-top">
                 <span className="combat-icon">
                   <Icon size={24} strokeWidth={1.5} aria-hidden="true" />
@@ -62,7 +67,7 @@ export function CombatFeatures({ text }: { text: Record<string, string> }) {
               </div>
             </article>
           ))}
-        </div>
+        </DepthScene>
       </div>
     </section>
   );

@@ -48,7 +48,7 @@ export default async function Product({
   const p = await getProduct(slug);
   if (!p) notFound();
   return (
-    <>
+    <div className="cyber-site">
       {!isDemoProduct(p) && <StructuredData data={productStructuredData(p)} />}
       <StructuredData
         data={{
@@ -142,6 +142,6 @@ export default async function Product({
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

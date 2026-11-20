@@ -10,7 +10,7 @@ export default async function Account() {
   const user = await currentUser();
   if (!user) redirect("/login");
   return (
-    <>
+    <div className="cyber-site">
       <Header />
       <main className="container section">
         <div className="eyebrow">YOUR ACCOUNT</div>
@@ -31,6 +31,6 @@ export default async function Account() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

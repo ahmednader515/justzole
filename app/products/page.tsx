@@ -14,7 +14,7 @@ export default async function Products() {
   const products = await getCatalog();
   const realProducts = products.filter((p) => !isDemoProduct(p));
   return (
-    <>
+    <div className="cyber-site">
       <StructuredData
         data={{
           "@context": "https://schema.org",
@@ -47,6 +47,6 @@ export default async function Products() {
         <Catalog products={products} />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const siteUrl = new URL(
-  process.env.SITE_URL || "https://justzole.vercel.app",
+  process.env.SITE_URL || "https://justzole.com",
 ).origin;
 export const siteDescription =
   "Browse For Honor scripts and hacks at Just Zole. Compare product features, watch video previews, and contact the team on Discord for pricing and availability.";

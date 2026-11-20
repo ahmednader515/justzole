@@ -3,6 +3,7 @@ import { CrosshairCursor } from "@/components/crosshair-cursor";
 import { StructuredData } from "@/components/structured-data";
 import { absoluteUrl, siteDescription, siteUrl } from "@/lib/seo";
 import "./globals.css";
+import "./public-theme.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {

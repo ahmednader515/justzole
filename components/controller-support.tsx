@@ -4,6 +4,7 @@ import playstation from "@/assets/ZOLE_CONTROLLER_PLAYSTATION.png";
 import xbox from "@/assets/ZOLE_CONTROLLER_XBOX.png";
 import gamesir from "@/assets/ZOLE_CONTROLLER_GAMESIR.png";
 import { AccentText } from "./accent-text";
+import { DepthScene } from "./depth-scene";
 
 const controllers = [
   { key: "playstation", image: playstation },
@@ -28,9 +29,13 @@ export function ControllerSupport({ text }: { text: Record<string, string> }) {
         </h2>
         <p>{text.description}</p>
       </div>
-      <div className="controller-grid">
+      <DepthScene className="controller-grid">
         {controllers.map(({ key, image }, index) => (
-          <article className={`controller-card controller-${key}`} key={key}>
+          <article
+            className={`controller-card controller-${key}`}
+            key={key}
+            data-depth-card
+          >
             <div className="controller-card-header">
               <span className="controller-number">
                 0{index + 1} / CONTROLLER
@@ -54,7 +59,7 @@ export function ControllerSupport({ text }: { text: Record<string, string> }) {
             </div>
           </article>
         ))}
-      </div>
+      </DepthScene>
       <div className="controller-bottom">
         <p>
           <span aria-hidden="true" />

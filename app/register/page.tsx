@@ -7,7 +7,7 @@ export const metadata = {
 };
 export default function Register() {
   return (
-    <main className="auth-shell">
+    <main className="auth-shell cyber-site">
       <Link href="/">
         <Brand />
       </Link>
