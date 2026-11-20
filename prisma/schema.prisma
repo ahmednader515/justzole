@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProductStatus {
+  AVAILABLE
+  SOLD_OUT
+  COMING_SOON
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now())
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+}
+
+model Product {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  description     String
+  game            String
+  category        String        @default("Scripts")
+  price           Decimal?      @db.Decimal(12, 2)
+  currency        String        @default("EGP")
+  imageUrl        String?
+  videoUrl        String?
+  features        String[]
+  status          ProductStatus @default(AVAILABLE)
+  featured        Boolean       @default(false)
+  published       Boolean       @default(true)
+  discordUrl      String?
+  sourceMessageId String?       @unique
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sales           Sale[]
+  events          Event[]
+}
+
+model Sale {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int
+  unitPrice Decimal  @db.Decimal(12, 2)
+  currency  String
+  note      String?
+  soldAt    DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  type      String
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt, type])
+}
+
+model RateLimit {
+  key     String   @id
+  count   Int      @default(1)
+  resetAt DateTime
+}
