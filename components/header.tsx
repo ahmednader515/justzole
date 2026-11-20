@@ -3,6 +3,8 @@ import { currentUser } from "@/lib/auth";
 import { logout } from "@/lib/actions";
 import { Brand, DiscordIcon } from "./icons";
 import { getHomepageContent } from "@/lib/homepage";
+import { Youtube } from "lucide-react";
+import { YOUTUBE_CHANNEL_URL } from "@/lib/social";
 export async function Header() {
   const [user, content] = await Promise.all([
     currentUser(),
@@ -59,6 +61,16 @@ export async function Header() {
             )}
             <a className="button button-small" href="/go/discord">
               <DiscordIcon size={17} /> {text.joinDiscord}
+            </a>
+            <a
+              className="youtube-social-link"
+              href={YOUTUBE_CHANNEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Just Zole on YouTube (opens in a new tab)"
+              title="Watch Just Zole on YouTube"
+            >
+              <Youtube size={21} aria-hidden="true" />
             </a>
           </div>
         </header>

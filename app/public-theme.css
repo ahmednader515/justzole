@@ -83,6 +83,28 @@
 .cyber-site .header-actions {
   gap: 15px;
 }
+.cyber-site .youtube-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 41px;
+  height: 41px;
+  border: 1px solid #f74a5c66;
+  border-radius: 7px;
+  color: #ff354d;
+  background: #f02c3c0a;
+  transition:
+    background 180ms,
+    box-shadow 180ms,
+    transform 180ms;
+}
+.cyber-site .youtube-social-link:hover,
+.cyber-site .youtube-social-link:focus-visible {
+  background: #f02c3c20;
+  box-shadow: 0 0 18px #f02c3c35;
+  transform: translateY(-1px);
+}
 .cyber-site .account-link {
   font-size: 0.75rem;
 }

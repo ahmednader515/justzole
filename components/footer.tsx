@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Brand, DiscordIcon } from "./icons";
 import { getHomepageContent } from "@/lib/homepage";
+import { Youtube } from "lucide-react";
+import { YOUTUBE_CHANNEL_URL } from "@/lib/social";
 export async function Footer() {
   const content = await getHomepageContent();
   if (!content.footer.visible) return null;
@@ -24,6 +26,9 @@ export async function Footer() {
         {content.rules.visible && <Link href="/#rules">{text.rules}</Link>}
         <a href="/go/discord">
           {text.support} <DiscordIcon size={16} />
+        </a>
+        <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer">
+          YouTube <Youtube size={18} aria-hidden="true" />
         </a>
         <Link href="/login">{text.account}</Link>
       </div>
