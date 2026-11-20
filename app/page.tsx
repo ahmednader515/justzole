@@ -4,181 +4,196 @@ import {
   ShieldCheck,
   Zap,
   Headphones,
-  MessageSquare,
   MousePointer2,
   Gamepad2,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DiscordIcon } from "@/components/icons";
 import { Catalog } from "@/components/catalog";
 import { getCatalog } from "@/lib/products";
+import { getHomepageContent } from "@/lib/homepage";
 import { HeroMotion } from "@/components/hero-motion";
+import { Reviews } from "@/components/reviews";
+import { ServerRules } from "@/components/server-rules";
+import { HowToUse } from "@/components/how-to-use";
+import { AccentText } from "@/components/accent-text";
+
 export const dynamic = "force-dynamic";
+
 export default async function Home() {
-  const products = await getCatalog();
+  const content = await getHomepageContent();
+  const products = content.products.visible ? await getCatalog() : [];
+  const hero = content.hero.text;
+  const collection = content.products.text;
+  const how = content.howItWorks.text;
+  const community = content.community.text;
+
   return (
     <>
       <Header />
       <main>
-        <HeroMotion>
-          <div className="hero-copy">
-            <div className="eyebrow">
-              <span /> THE JUST ZOLE COLLECTION
+        {content.hero.visible && (
+          <HeroMotion>
+            <div className="hero-copy">
+              <div className="eyebrow">
+                <span />
+                {hero.eyebrow}
+              </div>
+              <h1>
+                {hero.titleFirst}
+                <br />
+                {hero.titleSecond} <em>{hero.titleAccent}</em>
+              </h1>
+              <p>{hero.description}</p>
+              <div className="hero-buttons">
+                <Link
+                  className="button"
+                  href={content.products.visible ? "#products" : "/products"}
+                >
+                  <Crosshair size={18} />
+                  {hero.productsButton}
+                </Link>
+                <a className="button button-outline" href="/go/discord">
+                  <DiscordIcon size={19} />
+                  {hero.communityButton}
+                </a>
+              </div>
+              <div className="hero-note">
+                <span className="avatar-stack" aria-hidden="true">
+                  <i>Z</i>
+                  <i>J</i>
+                  <i>
+                    <Gamepad2 size={14} />
+                  </i>
+                </span>
+                <span>{hero.note}</span>
+              </div>
             </div>
-            <h1>
-              YOUR GAME.
-              <br />
-              YOUR <em>EDGE.</em>
-            </h1>
-            <p>
-              Go beyond the ordinary. Discover game scripts and tools built to
-              change the way you play.
-            </p>
-            <div className="hero-buttons">
-              <Link className="button" href="#products">
-                <Crosshair size={18} /> Explore products
-              </Link>
-              <a className="button button-outline" href="/go/discord">
-                <DiscordIcon size={19} /> Join the community
-              </a>
-            </div>
-            <div className="hero-note">
-              <span className="avatar-stack">
-                <i>Z</i>
-                <i>J</i>
-                <i>
-                  <Gamepad2 size={14} />
-                </i>
+            <div className="hero-visual" aria-hidden="true">
+              <div className="visual-grid" />
+              <div className="visual-orbit orbit-1" />
+              <div className="visual-orbit orbit-2" />
+              <div className="visual-orbit orbit-3" />
+              <div className="visual-cross cross-one" />
+              <div className="visual-cross cross-two" />
+              <span className="visual-coordinate coordinate-top">
+                {hero.visualTop}
               </span>
-              <span>
-                A community for players who want <b>more.</b>
+              <div className="hero-z">
+                {hero.visualSymbol}
+                <span />
+              </div>
+              <div className="visual-label">
+                <span className="live-dot" />
+                {hero.visualLabel}
+              </div>
+              <span className="visual-coordinate coordinate-bottom">
+                {hero.visualBottom}
               </span>
             </div>
-          </div>
-          <div className="hero-visual" aria-hidden="true">
-            <div className="visual-grid" />
-            <div className="visual-orbit orbit-1" />
-            <div className="visual-orbit orbit-2" />
-            <div className="visual-orbit orbit-3" />
-            <div className="visual-cross cross-one" />
-            <div className="visual-cross cross-two" />
-            <span className="visual-coordinate coordinate-top">
-              JZ / SYSTEM ONLINE
-            </span>
-            <div className="hero-z">
-              Z<span />
-            </div>
-            <div className="visual-label">
-              <span className="live-dot" /> THE ADVANTAGE IS YOURS
-            </div>
-            <span className="visual-coordinate coordinate-bottom">
-              PLAY BEYOND LIMITS — JUST ZOLE
-            </span>
-          </div>
-        </HeroMotion>
-        <div className="benefit-strip">
-          <div className="container benefits">
-            <div>
-              <ShieldCheck />
-              <span>Made for your game</span>
-            </div>
-            <div>
-              <Zap />
-              <span>Ready for the next level</span>
-            </div>
-            <div>
-              <Headphones />
-              <span>Support on Discord</span>
-            </div>
-            <div>
-              <DiscordIcon />
-              <span>Community comes first</span>
+          </HeroMotion>
+        )}
+        {content.benefits.visible && (
+          <div className="benefit-strip">
+            <div className="container benefits">
+              <div>
+                <ShieldCheck />
+                <span>{content.benefits.text.first}</span>
+              </div>
+              <div>
+                <Zap />
+                <span>{content.benefits.text.second}</span>
+              </div>
+              <div>
+                <Headphones />
+                <span>{content.benefits.text.third}</span>
+              </div>
+              <div>
+                <DiscordIcon />
+                <span>{content.benefits.text.fourth}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <section id="products" className="container section">
-          <div className="section-heading">
-            <div>
-              <div className="eyebrow">THE ARSENAL</div>
-              <h2>
-                Find your next advantage<span>.</span>
-              </h2>
-              <p>
-                Explore the collection. Find your fit. Make it yours on Discord.
-              </p>
-            </div>
-            <Link className="subtle-link" href="/products">
-              View all products <ChevronRight size={17} />
-            </Link>
-          </div>
-          <Catalog products={products} compact />
-        </section>
-        <section id="how-it-works" className="how-section">
-          <div className="container">
+        )}
+        {content.products.visible && (
+          <section id="products" className="container section">
             <div className="section-heading">
               <div>
-                <div className="eyebrow">NO COMPLICATED CHECKOUT</div>
+                <div className="eyebrow">{collection.eyebrow}</div>
                 <h2>
-                  Three steps. You’re in<span>.</span>
+                  <AccentText text={collection.title} />
                 </h2>
+                <p>{collection.description}</p>
               </div>
-              <p>Everything happens with our community.</p>
+              <Link className="subtle-link" href="/products">
+                {collection.viewAll}
+                <ChevronRight size={17} />
+              </Link>
             </div>
-            <div className="steps">
-              <article>
-                <div className="step-icon">
-                  <MousePointer2 />
+            <Catalog products={products} compact copy={collection} />
+          </section>
+        )}
+        {content.howItWorks.visible && (
+          <section id="how-it-works" className="how-section">
+            <div className="container">
+              <div className="section-heading">
+                <div>
+                  <div className="eyebrow">{how.eyebrow}</div>
+                  <h2>
+                    <AccentText text={how.title} />
+                  </h2>
                 </div>
-                <h3>Find your fit</h3>
-                <p>
-                  Browse products, check the features, and watch available
-                  showcases.
-                </p>
-              </article>
-              <article>
-                <div className="step-icon">
-                  <DiscordIcon size={24} />
-                </div>
-                <h3>Meet us on Discord</h3>
-                <p>
-                  Join Just Zole and connect with the team to ask questions and
-                  check availability.
-                </p>
-              </article>
-              <article>
-                <div className="step-icon">
-                  <Gamepad2 />
-                </div>
-                <h3>Get in the game</h3>
-                <p>
-                  Arrange your purchase on the server and get help from the
-                  people behind it.
-                </p>
-              </article>
+                <p>{how.description}</p>
+              </div>
+              <div className="steps">
+                <article>
+                  <div className="step-icon">
+                    <MousePointer2 />
+                  </div>
+                  <h3>{how.firstTitle}</h3>
+                  <p>{how.firstDescription}</p>
+                </article>
+                <article>
+                  <div className="step-icon">
+                    <DiscordIcon size={24} />
+                  </div>
+                  <h3>{how.secondTitle}</h3>
+                  <p>{how.secondDescription}</p>
+                </article>
+                <article>
+                  <div className="step-icon">
+                    <Gamepad2 />
+                  </div>
+                  <h3>{how.thirdTitle}</h3>
+                  <p>{how.thirdDescription}</p>
+                </article>
+              </div>
             </div>
-          </div>
-        </section>
-        <section className="container">
-          <div className="community-banner">
-            <div className="community-mark">
-              <DiscordIcon size={64} />
+          </section>
+        )}
+        {content.howToUse.visible && <HowToUse text={content.howToUse.text} />}
+        {content.reviews.visible && <Reviews text={content.reviews.text} />}
+        {content.rules.visible && <ServerRules text={content.rules.text} />}
+        {content.community.visible && (
+          <section className="container">
+            <div className="community-banner">
+              <div className="community-mark">
+                <DiscordIcon size={64} />
+              </div>
+              <div>
+                <div className="eyebrow">{community.eyebrow}</div>
+                <h2>{community.title}</h2>
+                <p>{community.description}</p>
+              </div>
+              <a className="button" href="/go/discord">
+                <DiscordIcon size={18} />
+                {community.button}
+              </a>
             </div>
-            <div>
-              <div className="eyebrow">MORE THAN A PRODUCT</div>
-              <h2>Your next move starts here.</h2>
-              <p>
-                New drops, product support, and players like you. All in one
-                server.
-              </p>
-            </div>
-            <a className="button" href="/go/discord">
-              <DiscordIcon size={18} /> Join Just Zole
-            </a>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
       <Footer />
     </>

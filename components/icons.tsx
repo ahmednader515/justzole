@@ -11,15 +11,22 @@ export function DiscordIcon({ size = 20 }: { size?: number }) {
     </svg>
   );
 }
-export function Brand({ small = false }: { small?: boolean }) {
+export function Brand({
+  small = false,
+  copy,
+}: {
+  small?: boolean;
+  copy?: Record<string, string>;
+}) {
   return (
     <span className={`brand ${small ? "brand-small" : ""}`}>
       <span className="brand-symbol">
-        Z<span>•</span>
+        {copy?.brandSymbol ?? "Z"}
+        <span>•</span>
       </span>
       <span>
-        JUST <b>ZOLE</b>
-        <small>BUILT FOR THE ADVANTAGE</small>
+        {copy?.brandFirst ?? "JUST"} <b>{copy?.brandLast ?? "ZOLE"}</b>
+        <small>{copy?.brandTagline ?? "BUILT FOR THE ADVANTAGE"}</small>
       </span>
     </span>
   );

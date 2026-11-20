@@ -40,7 +40,11 @@ export default async function Product({
             </div>
             {p.videoUrl && (
               <div className="panel">
-                <h3>See it in action</h3>
+                <h3>
+                  {p.slug.startsWith("demo-for-honor-")
+                    ? "For Honor trailer · demo media"
+                    : "See it in action"}
+                </h3>
                 <ProductVideo url={p.videoUrl} />
               </div>
             )}

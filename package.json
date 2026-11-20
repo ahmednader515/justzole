@@ -12,7 +12,9 @@
     "db:studio": "prisma studio",
     "discord:import": "tsx scripts/import-discord.ts",
     "format": "prettier --write app components lib prisma/seed.ts scripts prisma.config.ts next.config.ts package.json tsconfig.json",
-    "test:integrations": "tsx scripts/verify-integrations.ts"
+    "test:integrations": "tsx scripts/verify-integrations.ts",
+    "db:seed:demo": "tsx scripts/seed-demo-products.ts",
+    "db:demo:media": "tsx scripts/update-demo-media.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.900.0",

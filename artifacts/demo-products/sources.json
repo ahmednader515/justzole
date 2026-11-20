@@ -1,0 +1,36 @@
+{
+  "source": "https://store.steampowered.com/app/304390/",
+  "note": "Images and video are official For Honor promotional media used for this demo, not demonstrations of a script.",
+  "products": [
+    {
+      "product": "demo-for-honor-starter",
+      "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/304390/b44e9cec8aad36fbda39c5fc8ff31dd265aac213/ss_b44e9cec8aad36fbda39c5fc8ff31dd265aac213.1920x1080.jpg?t=1793633078",
+      "video": "https://www.youtube.com/watch?v=zkK5xtMJ58U"
+    },
+    {
+      "product": "demo-for-honor-duelist",
+      "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/304390/37c713982e81b3a94152f75ac4a645749e56787a/ss_37c713982e81b3a94152f75ac4a645749e56787a.1920x1080.jpg?t=1793633078",
+      "video": "https://www.youtube.com/watch?v=cBzhMK22XRs"
+    },
+    {
+      "product": "demo-for-honor-dominion",
+      "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/304390/83da0e7bb47a3330b9802f043793ad50bde51f94/ss_83da0e7bb47a3330b9802f043793ad50bde51f94.1920x1080.jpg?t=1793633078",
+      "video": "https://www.youtube.com/watch?v=zkK5xtMJ58U"
+    },
+    {
+      "product": "demo-for-honor-controller",
+      "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/304390/ss_4d71d0150ad7e55b8d3883dba083dc187a7ebfae.1920x1080.jpg?t=1793633078",
+      "video": "https://www.youtube.com/watch?v=cBzhMK22XRs"
+    },
+    {
+      "product": "demo-for-honor-training",
+      "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/304390/ss_f999b373cb537dce1313fc5cb35f53ca1bcf6820.1920x1080.jpg?t=1793633078",
+      "video": "https://www.youtube.com/watch?v=zkK5xtMJ58U"
+    },
+    {
+      "product": "demo-for-honor-complete",
+      "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/304390/15af9bb15d5e353136c58dbc654977ed9fb9aeef/ss_15af9bb15d5e353136c58dbc654977ed9fb9aeef.1920x1080.jpg?t=1793633078",
+      "video": "https://www.youtube.com/watch?v=cBzhMK22XRs"
+    }
+  ]
+}

@@ -45,7 +45,7 @@ export function SaleForm({
           />
         </label>
         <label>
-          <span>Price per unit ({product?.currency || "EGP"})</span>
+          <span>Price per unit ({product?.currency || "USD"})</span>
           <input
             key={selected}
             name="unitPrice"

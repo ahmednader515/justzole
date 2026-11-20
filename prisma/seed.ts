@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { hash } from "bcryptjs";
 import { db } from "../lib/db";
+import { seedReviews } from "../lib/seed-reviews";
 async function seed() {
   const email = "admin@zole.com";
   const existing = await db.user.findUnique({ where: { email } });
@@ -18,6 +19,10 @@ async function seed() {
     });
     console.log("Administrator created.");
   } else console.log("Administrator already exists; credentials unchanged.");
+  const reviews = await seedReviews();
+  console.log(
+    `Added ${reviews.count} supplied community reviews; existing reviews unchanged.`,
+  );
   console.log(
     "No unverified products are seeded. Use the dashboard or Discord importer for real listings.",
   );

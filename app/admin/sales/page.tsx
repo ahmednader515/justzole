@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { AdminHeading, EmptyAdmin } from "@/components/admin-ui";
 import { SaleForm } from "@/components/sale-form";
+import { DeleteTransaction } from "@/components/delete-transaction";
 export default async function Sales() {
   await requireAdmin();
   const [products, sales] = await Promise.all([
@@ -44,8 +45,8 @@ export default async function Sales() {
           </p>
           {sales.length ? (
             sales.map((s) => (
-              <div className="activity-row" key={s.id}>
-                <div>
+              <div className="activity-row transaction-row" key={s.id}>
+                <div className="transaction-summary">
                   <b>{s.product.title}</b>
                   <small>
                     {s.soldAt.toLocaleDateString("en-GB")} · {s.quantity} ×{" "}
@@ -53,10 +54,17 @@ export default async function Sales() {
                   </small>
                   {s.note && <small>{s.note}</small>}
                 </div>
-                <strong>
-                  {(s.quantity * Number(s.unitPrice)).toLocaleString()}{" "}
-                  {s.currency}
-                </strong>
+                <div className="transaction-actions">
+                  <strong>
+                    {(s.quantity * Number(s.unitPrice)).toLocaleString()}{" "}
+                    {s.currency}
+                  </strong>
+                  <DeleteTransaction
+                    id={s.id}
+                    productTitle={s.product.title}
+                    summary={`${s.soldAt.toLocaleDateString("en-GB")} · ${s.quantity} × ${Number(s.unitPrice).toLocaleString()} ${s.currency} · Total ${(s.quantity * Number(s.unitPrice)).toLocaleString()} ${s.currency}`}
+                  />
+                </div>
               </div>
             ))
           ) : (

@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { AdminHeading, EmptyAdmin } from "@/components/admin-ui";
+import { DeleteUser } from "@/components/delete-user";
 export default async function Users({
   searchParams,
 }: {
@@ -8,7 +9,7 @@ export default async function Users({
 }) {
   await requireAdmin();
   const { q = "", page = "1" } = await searchParams;
-  const current = Math.max(1, Number.parseInt(page) || 1);
+  const requestedPage = Math.max(1, Number.parseInt(page) || 1);
   const where = q
     ? {
         OR: [
@@ -17,27 +18,26 @@ export default async function Users({
         ],
       }
     : {};
-  const [users, total] = await Promise.all([
-    db.user.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      skip: (current - 1) * 50,
-      take: 50,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
-    }),
-    db.user.count({ where }),
-  ]);
+  const total = await db.user.count({ where });
+  const current = Math.min(requestedPage, Math.max(1, Math.ceil(total / 50)));
+  const users = await db.user.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    skip: (current - 1) * 50,
+    take: 50,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+    },
+  });
   return (
     <>
       <AdminHeading
         title="Community accounts"
-        description="View the people registered on your website."
+        description="View and manage the people registered on your website."
       />
       <form className="user-search">
         <input
@@ -62,6 +62,7 @@ export default async function Users({
                   <th>Email</th>
                   <th>Role</th>
                   <th>Joined</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,6 +76,13 @@ export default async function Users({
                       <span className="tag">{u.role}</span>
                     </td>
                     <td>{u.createdAt.toLocaleDateString("en-GB")}</td>
+                    <td>
+                      {u.role === "ADMIN" ? (
+                        <span className="muted">Protected admin</span>
+                      ) : (
+                        <DeleteUser id={u.id} name={u.name} email={u.email} />
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -7,6 +7,8 @@ import {
   ChartNoAxesCombined,
   Users,
   ExternalLink,
+  MessageSquare,
+  PanelsTopLeft,
 } from "lucide-react";
 export function AdminNav() {
   const path = usePathname();
@@ -14,7 +16,9 @@ export function AdminNav() {
     <nav className="admin-nav" aria-label="Admin navigation">
       {[
         { href: "/admin", name: "Overview", Icon: LayoutDashboard },
+        { href: "/admin/homepage", name: "Homepage", Icon: PanelsTopLeft },
         { href: "/admin/products", name: "Products", Icon: Package },
+        { href: "/admin/reviews", name: "Reviews", Icon: MessageSquare },
         { href: "/admin/sales", name: "Sales", Icon: ChartNoAxesCombined },
         {
           href: "/admin/analytics",

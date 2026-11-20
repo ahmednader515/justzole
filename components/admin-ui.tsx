@@ -5,11 +5,15 @@ export function AdminHeading({
   title,
   description,
   action = false,
+  actionHref = "/admin/products/new",
+  actionLabel = "Add product",
 }: {
   eyebrow?: string;
   title: string;
   description: string;
   action?: boolean;
+  actionHref?: string;
+  actionLabel?: string;
 }) {
   return (
     <div className="admin-heading">
@@ -22,8 +26,8 @@ export function AdminHeading({
         <p>{description}</p>
       </div>
       {action && (
-        <Link className="button" href="/admin/products/new">
-          <Plus size={17} /> Add product
+        <Link className="button" href={actionHref}>
+          <Plus size={17} /> {actionLabel}
         </Link>
       )}
     </div>

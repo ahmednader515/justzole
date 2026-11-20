@@ -193,7 +193,7 @@ export function ProductForm({ product: p }: { product?: EditableProduct }) {
                 required
                 pattern="[A-Z]{3}"
                 maxLength={3}
-                defaultValue={p?.currency || "EGP"}
+                defaultValue={p?.currency || "USD"}
               />
             </label>
           </div>

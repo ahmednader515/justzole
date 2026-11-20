@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Crosshair, Play, Code2 } from "lucide-react";
+import { defaultHomepageContent } from "@/lib/homepage-defaults";
+const defaultCopy = defaultHomepageContent().products.text;
 export type CatalogProduct = {
   id: string;
   slug: string;
@@ -15,7 +17,14 @@ export type CatalogProduct = {
   featured: boolean;
   createdAt: string;
 };
-export function ProductCard({ product: p }: { product: CatalogProduct }) {
+export function ProductCard({
+  product: p,
+  copy,
+}: {
+  product: CatalogProduct;
+  copy?: Record<string, string>;
+}) {
+  const text = { ...defaultCopy, ...copy };
   return (
     <Link href={`/products/${p.slug}`} className="product-card">
       <div className="product-art">
@@ -28,11 +37,15 @@ export function ProductCard({ product: p }: { product: CatalogProduct }) {
           </div>
         )}
         <span className={`tag status-${p.status.toLowerCase()}`}>
-          {p.status.replaceAll("_", " ")}
+          {p.status === "AVAILABLE"
+            ? text.available
+            : p.status === "SOLD_OUT"
+              ? text.soldOut
+              : text.comingSoon}
         </span>
         {p.videoUrl && (
           <span className="video-badge">
-            <Play size={12} fill="currentColor" /> Showcase
+            <Play size={12} fill="currentColor" /> {text.cardVideo}
           </span>
         )}
       </div>
@@ -52,11 +65,11 @@ export function ProductCard({ product: p }: { product: CatalogProduct }) {
                 {Number(p.price).toLocaleString()} <small>{p.currency}</small>
               </>
             ) : (
-              "Ask on Discord"
+              text.cardPricing
             )}
           </strong>
           <span>
-            View product <Crosshair size={15} />
+            {text.cardView} <Crosshair size={15} />
           </span>
         </div>
       </div>

@@ -43,7 +43,7 @@ model Product {
   game            String
   category        String        @default("Scripts")
   price           Decimal?      @db.Decimal(12, 2)
-  currency        String        @default("EGP")
+  currency        String        @default("USD")
   imageUrl        String?
   videoUrl        String?
   features        String[]
@@ -83,4 +83,23 @@ model RateLimit {
   key     String   @id
   count   Int      @default(1)
   resetAt DateTime
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  author    String   @default("Community member")
+  content   String
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, sortOrder])
+}
+
+model HomepageSection {
+  key       String   @id
+  visible   Boolean  @default(true)
+  text      Json
+  updatedAt DateTime @updatedAt
 }

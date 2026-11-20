@@ -2,13 +2,18 @@
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal, PackageOpen, X } from "lucide-react";
 import { ProductCard, type CatalogProduct } from "./product-card";
+import { defaultHomepageContent } from "@/lib/homepage-defaults";
+const defaultCopy = defaultHomepageContent().products.text;
 export function Catalog({
   products,
   compact = false,
+  copy,
 }: {
   products: CatalogProduct[];
   compact?: boolean;
+  copy?: Record<string, string>;
 }) {
+  const text = { ...defaultCopy, ...copy };
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All products");
   const [game, setGame] = useState("All games");
@@ -53,7 +58,7 @@ export function Catalog({
               className={category === c ? "active" : ""}
               onClick={() => setCategory(c)}
             >
-              {c}
+              {c === "All products" ? text.allProducts : c}
               {c === "All products" && <span>{products.length}</span>}
             </button>
           ))}
@@ -62,7 +67,7 @@ export function Catalog({
           <Search size={17} />
           <input
             aria-label="Search products"
-            placeholder="Search your next advantage..."
+            placeholder={text.search}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -75,8 +80,8 @@ export function Catalog({
       </div>
       <div className="catalog-subtoolbar">
         <span>
-          {visible.length} {visible.length === 1 ? "product" : "products"} to
-          explore
+          {visible.length} {visible.length === 1 ? text.singular : text.plural}{" "}
+          {text.countSuffix}
         </span>
         <div>
           <SlidersHorizontal size={15} />
@@ -85,7 +90,7 @@ export function Catalog({
             value={game}
             onChange={(e) => setGame(e.target.value)}
           >
-            <option>All games</option>
+            <option value="All games">{text.allGames}</option>
             {[...new Set(products.map((p) => p.game))].map((g) => (
               <option key={g}>{g}</option>
             ))}
@@ -95,17 +100,17 @@ export function Catalog({
             value={sort}
             onChange={(e) => setSort(e.target.value)}
           >
-            <option value="featured">Featured first</option>
-            <option value="newest">Newest first</option>
-            <option value="price-low">Price: low to high</option>
-            <option value="name">Name: A–Z</option>
+            <option value="featured">{text.featured}</option>
+            <option value="newest">{text.newest}</option>
+            <option value="price-low">{text.priceLow}</option>
+            <option value="name">{text.nameSort}</option>
           </select>
         </div>
       </div>
       {visible.length ? (
         <div className="product-grid">
           {visible.slice(0, compact ? 6 : undefined).map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} copy={text} />
           ))}
         </div>
       ) : (
@@ -113,15 +118,9 @@ export function Catalog({
           <div className="empty-icon">
             <PackageOpen size={32} strokeWidth={1.3} />
           </div>
-          <h3>
-            {products.length
-              ? "No products match your search"
-              : "The next drop is on its way."}
-          </h3>
+          <h3>{products.length ? text.noMatchTitle : text.emptyTitle}</h3>
           <p>
-            {products.length
-              ? "Try another game, category, or search term."
-              : "New scripts. New possibilities. Join Discord to see what’s available and hear about upcoming releases."}
+            {products.length ? text.noMatchDescription : text.emptyDescription}
           </p>
           {products.length ? (
             <button
@@ -132,11 +131,11 @@ export function Catalog({
                 setQuery("");
               }}
             >
-              Clear filters
+              {text.clearFilters}
             </button>
           ) : (
             <a className="button button-outline" href="/go/discord">
-              Explore the community
+              {text.communityButton}
             </a>
           )}
         </div>
