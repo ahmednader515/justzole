@@ -244,6 +244,7 @@
   height: auto;
   max-height: 100%;
   object-fit: contain;
+  transform: perspective(1000px) rotateY(-9deg) rotateX(4deg);
   border: 1px solid #f02c3c65;
   border-radius: 12px;
   box-shadow:
@@ -975,7 +976,8 @@
     display: none;
   }
   .cyber-site .cyber-visual,
-  .cyber-monitor {
+  .cyber-monitor,
+  .hero-artwork img {
     transform: none;
   }
 }
