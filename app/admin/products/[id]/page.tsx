@@ -18,7 +18,13 @@ export default async function EditProduct({
         title="Edit product"
         description={`Update ${p.title} and its availability.`}
       />
-      <ProductForm product={{ ...p, price: p.price?.toString() ?? null }} />
+      <ProductForm
+        product={{
+          ...p,
+          price: p.price?.toString() ?? null,
+          discountEndsAt: p.discountEndsAt?.toISOString() ?? null,
+        }}
+      />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { ArrowUpRight, Play } from "lucide-react";
 import { Brand, DiscordIcon } from "./icons";
-import { ProductVideo } from "./video";
+import { ShowcaseVideo } from "./showcase-video";
 import type { CatalogProduct } from "./product-card";
 import { DepthScene } from "./depth-scene";
 import { ProductPrice } from "./product-price";
@@ -48,16 +48,11 @@ export function ProductShowcase({
               price={product.price}
               currency={product.currency}
               discountPercent={product.discountPercent}
+              discountEndsAt={product.discountEndsAt}
+              showCountdown
               fallback={text.cardPricing}
             />
           </strong>
-          <span className={`tag status-${product.status.toLowerCase()}`}>
-            {product.status === "AVAILABLE"
-              ? text.available
-              : product.status === "SOLD_OUT"
-                ? text.soldOut
-                : text.comingSoon}
-          </span>
         </div>
         <a href={`/go/discord?product=${product.id}`} className="button">
           <DiscordIcon />
@@ -74,10 +69,9 @@ export function ProductShowcase({
             <figure className="showcase-feature" key={key} data-depth-card>
               <div className="showcase-video">
                 {url ? (
-                  <ProductVideo
+                  <ShowcaseVideo
                     url={url}
                     title={`${product.title}: ${text[`${key}VideoTitle`]}`}
-                    preview
                   />
                 ) : (
                   <div className="showcase-video-empty">

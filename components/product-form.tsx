@@ -2,6 +2,7 @@
 import { useActionState, useState } from "react";
 import { VideoUploadField } from "./video-upload-field";
 import { saveProduct } from "@/lib/actions";
+import { DiscountDeadlineField } from "./discount-deadline-field";
 
 type EditableProduct = {
   id: string;
@@ -11,6 +12,7 @@ type EditableProduct = {
   category: string;
   price: string | null;
   discountPercent: number;
+  discountEndsAt: string | null;
   currency: string;
   videoUrl: string | null;
   discordUrl: string | null;
@@ -108,20 +110,24 @@ export function ProductForm({ product: p }: { product?: EditableProduct }) {
               />
             </label>
           </div>
-          <label>
-            <span>Discount (%)</span>
-            <input
-              name="discountPercent"
-              type="number"
-              min="0"
-              max="100"
-              step="1"
-              defaultValue={p?.discountPercent ?? 0}
-            />
-          </label>
+          <div className="form-row">
+            <label>
+              <span>Discount (%)</span>
+              <input
+                name="discountPercent"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                defaultValue={p?.discountPercent ?? 0}
+              />
+            </label>
+            <DiscountDeadlineField initial={p?.discountEndsAt} />
+          </div>
           <p className="field-help">
-            Use 0 for no discount. The original and discounted prices appear
-            together on the storefront.
+            Use 0 for no discount. The deadline uses your device’s local time.
+            Leave it blank for no countdown. The regular price returns when the
+            countdown ends.
           </p>
           <label>
             <span>

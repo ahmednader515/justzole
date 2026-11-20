@@ -80,6 +80,7 @@ const productSchema = z.object({
   category: z.string().trim().min(2).max(80),
   price: z.union([z.literal(""), z.coerce.number().min(0).max(9999999999)]),
   discountPercent: z.coerce.number().int().min(0).max(100).default(0),
+  discountEndsAt: z.union([z.literal(""), z.iso.datetime()]).optional(),
   currency: z.string().regex(/^[A-Z]{3}$/),
   videoUrl: safeUrl,
   discordUrl: safeUrl.refine(
@@ -107,6 +108,10 @@ export async function saveProduct(
     return { error: "Enter a display price before applying a discount." };
   const data = {
     ...values,
+    discountEndsAt:
+      values.discountPercent > 0 && values.discountEndsAt
+        ? new Date(values.discountEndsAt)
+        : null,
     price: price === "" ? null : price,
     videoUrl: values.videoUrl || null,
     discordUrl: values.discordUrl || null,

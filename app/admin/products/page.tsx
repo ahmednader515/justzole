@@ -58,6 +58,7 @@ export default async function Products() {
                         price={p.price?.toString() ?? null}
                         currency={p.currency}
                         discountPercent={p.discountPercent}
+                        discountEndsAt={p.discountEndsAt?.toISOString() ?? null}
                       />
                     </td>
                     <td>{p.sales.reduce((sum, s) => sum + s.quantity, 0)}</td>

@@ -7,6 +7,7 @@ export async function getCatalog() {
   return products.map((p) => ({
     ...p,
     price: p.price?.toString() ?? null,
+    discountEndsAt: p.discountEndsAt?.toISOString() ?? null,
     createdAt: p.createdAt.toISOString(),
     updatedAt: p.updatedAt.toISOString(),
   }));

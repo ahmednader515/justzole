@@ -55,6 +55,7 @@ export function serializeJsonLd(value: unknown) {
 
 export type SearchProduct = {
   discountPercent?: number;
+  discountEndsAt?: string | Date | null;
   id: string;
   slug: string;
   title: string;
@@ -87,6 +88,7 @@ export function productStructuredData(product: SearchProduct) {
             price: discountedPrice(
               product.price.toString(),
               product.discountPercent,
+              product.discountEndsAt,
             ),
             priceCurrency: product.currency,
             availability: `https://schema.org/${

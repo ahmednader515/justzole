@@ -104,6 +104,8 @@ export default async function Product({
                 price={p.price?.toString() ?? null}
                 currency={p.currency}
                 discountPercent={p.discountPercent}
+                discountEndsAt={p.discountEndsAt?.toISOString() ?? null}
+                showCountdown
                 fallback="Ask for pricing"
               />
               <span>Purchase exclusively through our Discord server.</span>

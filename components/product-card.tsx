@@ -13,6 +13,7 @@ export type CatalogProduct = {
   category: string;
   price: string | null;
   discountPercent?: number;
+  discountEndsAt?: string | null;
   currency: string;
   videoUrl: string | null;
   status: string;
@@ -63,6 +64,7 @@ export function ProductCard({
               price={p.price}
               currency={p.currency}
               discountPercent={p.discountPercent}
+              discountEndsAt={p.discountEndsAt}
               fallback={text.cardPricing}
             />
           </strong>
