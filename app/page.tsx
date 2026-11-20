@@ -80,7 +80,7 @@ export default async function Home() {
                 <span>{hero.note}</span>
               </div>
             </div>
-            <HeroDashboard hero={hero} features={content.combatFeatures.text} />
+            <HeroDashboard />
           </HeroMotion>
         )}
         {content.benefits.visible && (

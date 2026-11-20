@@ -238,6 +238,18 @@
   height: 430px;
   perspective: 1000px;
 }
+.hero-artwork img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  border: 1px solid #f02c3c65;
+  border-radius: 12px;
+  box-shadow:
+    0 0 28px #f02c3c22,
+    0 22px 55px #0007;
+}
 .cyber-reticle {
   position: absolute;
   width: 420px;
