@@ -1,5 +1,9 @@
 # Just Zole
 
+Product discounts: set **Discount (%)** in the product editor (0 disables it). The storefront shows the original price, the discounted price, and the percentage off. Catalog, product detail, and search structured data use the same calculation. For an existing database, run `npx prisma db execute --file prisma/patches/add-product-discount.sql` followed by `npx prisma generate` before deploying this version. This additive patch preserves existing products and sales.
+
+Feature videos: open **Admin → Homepage → Product collection** to upload each of the three feature videos (MP4 or WebM, up to 25 MB) or paste a YouTube / hosted video URL. Edit each title and caption there too. Saving waits for uploads to finish. The public feature previews autoplay muted, loop, and hide controls; uploads retain their source audio track but play silently on the site.
+
 Search setup: the canonical public origin defaults to `https://justzole.com`; set `SITE_URL` when changing domains. The home, catalog, and real published product pages include page-specific search/social metadata. `/robots.txt` allows public search crawlers, including AI search crawlers, and advertises `/sitemap.xml`. The sitemap updates from published products and excludes demo listings. Demo product pages, sign-in, registration, accounts, and admin pages are marked noindex. Product structured data uses listed prices and availability only; sample prices and unconfirmed preorders are not advertised as offers.
 
 After deploying, verify the domain in Google Search Console and Bing Webmaster Tools, then submit `/sitemap.xml`. Optional `GOOGLE_SITE_VERIFICATION` and `BING_SITE_VERIFICATION` environment variables add the corresponding ownership meta tags. Replace demo listings with real product information before expecting product pages to be indexed. Search or AI answer placement is not guaranteed.

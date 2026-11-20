@@ -7,6 +7,21 @@ const youtubeHosts = new Set([
   "www.youtube-nocookie.com",
 ]);
 
+export function isProductVideoUrl(value: string): boolean {
+  if (getYouTubeEmbedUrl(value)) return true;
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === "https:" &&
+      !url.username &&
+      !url.password &&
+      /\.(mp4|webm)$/i.test(url.pathname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function getYouTubeEmbedUrl(value: string): string | null {
   let url: URL;
   try {

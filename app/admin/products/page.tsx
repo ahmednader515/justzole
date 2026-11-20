@@ -4,6 +4,7 @@ import { Pencil, Package } from "lucide-react";
 import { db } from "@/lib/db";
 import { AdminHeading, EmptyAdmin } from "@/components/admin-ui";
 import { DeleteProduct } from "@/components/delete-product";
+import { ProductPrice } from "@/components/product-price";
 export default async function Products() {
   await requireAdmin();
   const products = await db.product.findMany({
@@ -53,9 +54,11 @@ export default async function Products() {
                       </span>
                     </td>
                     <td>
-                      {p.price !== null
-                        ? `${Number(p.price).toLocaleString()} ${p.currency}`
-                        : "Ask on Discord"}
+                      <ProductPrice
+                        price={p.price?.toString() ?? null}
+                        currency={p.currency}
+                        discountPercent={p.discountPercent}
+                      />
                     </td>
                     <td>{p.sales.reduce((sum, s) => sum + s.quantity, 0)}</td>
                     <td>

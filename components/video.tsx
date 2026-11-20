@@ -34,7 +34,7 @@ export function ProductVideo({
   } catch {
     return null;
   }
-  if (/\.(mp4|webm)(\?|$)/i.test(url))
+  if (/\.(mp4|webm)([?#]|$)/i.test(url))
     return (
       <video
         className="product-video"
@@ -45,6 +45,7 @@ export function ProductVideo({
         muted={preview}
         loop={preview}
         disablePictureInPicture={preview}
+        disableRemotePlayback={preview}
         playsInline
         preload="metadata"
       >

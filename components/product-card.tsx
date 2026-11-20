@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Crosshair, Code2 } from "lucide-react";
 import { ProductVideo } from "./video";
+import { ProductPrice } from "./product-price";
 import { defaultHomepageContent } from "@/lib/homepage-defaults";
 const defaultCopy = defaultHomepageContent().products.text;
 export type CatalogProduct = {
@@ -11,6 +12,7 @@ export type CatalogProduct = {
   game: string;
   category: string;
   price: string | null;
+  discountPercent?: number;
   currency: string;
   videoUrl: string | null;
   status: string;
@@ -57,13 +59,12 @@ export function ProductCard({
         <p>{p.description}</p>
         <div className="product-card-bottom">
           <strong>
-            {p.price !== null ? (
-              <>
-                {Number(p.price).toLocaleString()} <small>{p.currency}</small>
-              </>
-            ) : (
-              text.cardPricing
-            )}
+            <ProductPrice
+              price={p.price}
+              currency={p.currency}
+              discountPercent={p.discountPercent}
+              fallback={text.cardPricing}
+            />
           </strong>
           <Link href={`/products/${p.slug}`}>
             {text.cardView} <Crosshair size={15} />

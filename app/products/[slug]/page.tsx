@@ -8,6 +8,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DiscordIcon } from "@/components/icons";
 import { ProductVideo } from "@/components/video";
+import { ProductPrice } from "@/components/product-price";
 import { StructuredData } from "@/components/structured-data";
 import {
   absoluteUrl,
@@ -99,13 +100,12 @@ export default async function Product({
             </span>
             <p className="detail-description">{p.description}</p>
             <div className="detail-price">
-              {p.price !== null ? (
-                <>
-                  {Number(p.price).toLocaleString()} <small>{p.currency}</small>
-                </>
-              ) : (
-                "Ask for pricing"
-              )}
+              <ProductPrice
+                price={p.price?.toString() ?? null}
+                currency={p.currency}
+                discountPercent={p.discountPercent}
+                fallback="Ask for pricing"
+              />
               <span>Purchase exclusively through our Discord server.</span>
             </div>
             {p.status === "AVAILABLE" ? (

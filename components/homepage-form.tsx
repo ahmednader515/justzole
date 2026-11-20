@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { saveHomepage } from "@/lib/homepage-actions";
+import { VideoUploadField } from "./video-upload-field";
 import {
   homepageDefinitions,
   homepageKeys,
@@ -11,6 +12,8 @@ import {
 
 export function HomepageForm({ content }: { content: HomepageContent }) {
   const [state, action, pending] = useActionState(saveHomepage, {});
+  const [uploads, setUploads] = useState<Record<string, boolean>>({});
+  const uploading = Object.values(uploads).some(Boolean);
   const [visibility, setVisibility] = useState(() =>
     Object.fromEntries(homepageKeys.map((key) => [key, content[key].visible])),
   );
@@ -68,25 +71,37 @@ export function HomepageForm({ content }: { content: HomepageContent }) {
               Show this section
             </label>
             {Object.entries(homepageDefinitions[key].fields).map(
-              ([name, definition]) => (
-                <label key={name}>
-                  <span>{definition.label}</span>
-                  {definition.multiline ? (
-                    <textarea
-                      name={`${key}.${name}`}
-                      rows={5}
-                      maxLength={12000}
-                      defaultValue={content[key].text[name]}
-                    />
-                  ) : (
-                    <input
-                      name={`${key}.${name}`}
-                      maxLength={12000}
-                      defaultValue={content[key].text[name]}
-                    />
-                  )}
-                </label>
-              ),
+              ([name, definition]) =>
+                key === "products" &&
+                /^(first|second|third)VideoUrl$/.test(name) ? (
+                  <VideoUploadField
+                    key={name}
+                    name={`${key}.${name}`}
+                    label={definition.label}
+                    initial={content[key].text[name]}
+                    onUploadingChange={(busy) =>
+                      setUploads((current) => ({ ...current, [name]: busy }))
+                    }
+                  />
+                ) : (
+                  <label key={name}>
+                    <span>{definition.label}</span>
+                    {definition.multiline ? (
+                      <textarea
+                        name={`${key}.${name}`}
+                        rows={5}
+                        maxLength={12000}
+                        defaultValue={content[key].text[name]}
+                      />
+                    ) : (
+                      <input
+                        name={`${key}.${name}`}
+                        maxLength={12000}
+                        defaultValue={content[key].text[name]}
+                      />
+                    )}
+                  </label>
+                ),
             )}
           </div>
         </details>
@@ -102,7 +117,7 @@ export function HomepageForm({ content }: { content: HomepageContent }) {
             {state.success}
           </p>
         )}
-        <button className="button" disabled={pending}>
+        <button className="button" disabled={pending || uploading}>
           {pending ? "Saving…" : "Save all changes"}
         </button>
       </div>

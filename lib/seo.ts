@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import { discountedPrice } from "./pricing";
 
-export const siteUrl = new URL(
-  process.env.SITE_URL || "https://justzole.com",
-).origin;
+export const siteUrl = new URL(process.env.SITE_URL || "https://justzole.com")
+  .origin;
 export const siteDescription =
   "Browse For Honor scripts and hacks at Just Zole. Compare product features, watch video previews, and contact the team on Discord for pricing and availability.";
 
@@ -54,6 +54,7 @@ export function serializeJsonLd(value: unknown) {
 }
 
 export type SearchProduct = {
+  discountPercent?: number;
   id: string;
   slug: string;
   title: string;
@@ -83,7 +84,10 @@ export function productStructuredData(product: SearchProduct) {
           offers: {
             "@type": "Offer",
             url,
-            price: product.price.toString(),
+            price: discountedPrice(
+              product.price.toString(),
+              product.discountPercent,
+            ),
             priceCurrency: product.currency,
             availability: `https://schema.org/${
               product.status === "AVAILABLE" ? "InStock" : "OutOfStock"

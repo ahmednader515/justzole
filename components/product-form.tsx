@@ -1,8 +1,8 @@
 "use client";
 import { useActionState, useState } from "react";
-import { Upload, LoaderCircle } from "lucide-react";
+import { VideoUploadField } from "./video-upload-field";
 import { saveProduct } from "@/lib/actions";
-import { ProductVideo } from "./video";
+
 type EditableProduct = {
   id: string;
   title: string;
@@ -10,6 +10,7 @@ type EditableProduct = {
   game: string;
   category: string;
   price: string | null;
+  discountPercent: number;
   currency: string;
   videoUrl: string | null;
   discordUrl: string | null;
@@ -18,80 +19,9 @@ type EditableProduct = {
   published: boolean;
   features: string[];
 };
-function VideoField({ initial }: { initial: string }) {
-  const [url, setUrl] = useState(initial),
-    [uploading, setUploading] = useState(false),
-    [error, setError] = useState("");
-  async function upload(file?: File) {
-    if (!file) return;
-    setUploading(true);
-    setError("");
-    try {
-      const data = new FormData();
-      data.set("file", file);
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error);
-      setUrl(result.url);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  }
-  return (
-    <div className="media-field">
-      <label>
-        Video preview
-        <input
-          type="url"
-          name="videoUrl"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://…"
-        />
-      </label>
-      <p className="field-help">
-        Paste a YouTube link, or upload an MP4 or WebM video.
-      </p>
-      <label className="upload-zone">
-        {uploading ? (
-          <LoaderCircle size={20} className="spin" />
-        ) : (
-          <Upload size={20} />
-        )}
-        <span>
-          {uploading
-            ? "Uploading to Cloudflare…"
-            : "Choose a file to upload to Cloudflare R2"}
-        </span>
-        <small>Up to 25 MB, or paste a hosted URL above</small>
-        <input
-          type="file"
-          accept="video/mp4,video/webm"
-          disabled={uploading}
-          onChange={(e) => upload(e.target.files?.[0])}
-        />
-      </label>
-      {error && (
-        <p className="form-error" role="alert">
-          {error}
-        </p>
-      )}
-      {url && <ProductVideo url={url} />}
-      <input
-        type="hidden"
-        name="videoUrlUploading"
-        value={uploading ? "yes" : "no"}
-      />
-    </div>
-  );
-}
 export function ProductForm({ product: p }: { product?: EditableProduct }) {
   const [state, action, pending] = useActionState(saveProduct, {});
+  const [uploading, setUploading] = useState(false);
   return (
     <form action={action} className="stack-form product-edit-form">
       <input type="hidden" name="id" value={p?.id || ""} />
@@ -179,6 +109,21 @@ export function ProductForm({ product: p }: { product?: EditableProduct }) {
             </label>
           </div>
           <label>
+            <span>Discount (%)</span>
+            <input
+              name="discountPercent"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              defaultValue={p?.discountPercent ?? 0}
+            />
+          </label>
+          <p className="field-help">
+            Use 0 for no discount. The original and discounted prices appear
+            together on the storefront.
+          </p>
+          <label>
             <span>
               Discord product link <span className="muted">(optional)</span>
             </span>
@@ -197,7 +142,11 @@ export function ProductForm({ product: p }: { product?: EditableProduct }) {
         <div>
           <section className="panel">
             <h2>Product video</h2>
-            <VideoField initial={p?.videoUrl || ""} />
+            <VideoUploadField
+              name="videoUrl"
+              initial={p?.videoUrl || ""}
+              onUploadingChange={setUploading}
+            />
           </section>
           <section className="panel">
             <h2>Visibility & availability</h2>
@@ -234,7 +183,7 @@ export function ProductForm({ product: p }: { product?: EditableProduct }) {
         </p>
       )}
       <div className="form-actions">
-        <button className="button" disabled={pending}>
+        <button className="button" disabled={pending || uploading}>
           {pending ? "Saving…" : "Save product"}
         </button>
         <a href="/admin/products" className="button button-outline">

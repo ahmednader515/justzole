@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { ArrowUpRight, Play } from "lucide-react";
 import { Brand, DiscordIcon } from "./icons";
 import { ProductVideo } from "./video";
 import type { CatalogProduct } from "./product-card";
 import { DepthScene } from "./depth-scene";
+import { ProductPrice } from "./product-price";
 
 export function ProductShowcase({
   products,
@@ -44,14 +44,12 @@ export function ProductShowcase({
         <p className="showcase-description">{product.description}</p>
         <div className="showcase-purchase">
           <strong className="showcase-price">
-            {product.price !== null ? (
-              <>
-                {Number(product.price).toLocaleString()}{" "}
-                <small>{product.currency}</small>
-              </>
-            ) : (
-              text.cardPricing
-            )}
+            <ProductPrice
+              price={product.price}
+              currency={product.currency}
+              discountPercent={product.discountPercent}
+              fallback={text.cardPricing}
+            />
           </strong>
           <span className={`tag status-${product.status.toLowerCase()}`}>
             {product.status === "AVAILABLE"
@@ -68,10 +66,6 @@ export function ProductShowcase({
             : "Ask about availability"}
           <ArrowUpRight size={17} />
         </a>
-        <Link href={`/products/${product.slug}`} className="showcase-details">
-          {text.cardView}
-          <ArrowUpRight size={15} />
-        </Link>
       </div>
       <DepthScene className="showcase-videos" label="Product feature previews">
         {(["first", "second", "third"] as const).map((key, index) => {

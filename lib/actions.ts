@@ -79,6 +79,7 @@ const productSchema = z.object({
   game: z.string().trim().min(2).max(80),
   category: z.string().trim().min(2).max(80),
   price: z.union([z.literal(""), z.coerce.number().min(0).max(9999999999)]),
+  discountPercent: z.coerce.number().int().min(0).max(100).default(0),
   currency: z.string().regex(/^[A-Z]{3}$/),
   videoUrl: safeUrl,
   discordUrl: safeUrl.refine(
@@ -102,6 +103,8 @@ export async function saveProduct(
         .join(". "),
     };
   const { price, ...values } = result.data;
+  if (price === "" && values.discountPercent > 0)
+    return { error: "Enter a display price before applying a discount." };
   const data = {
     ...values,
     price: price === "" ? null : price,
@@ -136,6 +139,7 @@ export async function saveProduct(
   revalidatePath("/");
   revalidatePath("/products");
   revalidatePath("/admin/products");
+  revalidatePath("/products", "layout");
   redirect("/admin/products");
 }
 export async function deleteProduct(form: FormData) {

@@ -2,11 +2,62 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { getYouTubeEmbedUrl } from "../lib/video";
+import { getYouTubeEmbedUrl, isProductVideoUrl } from "../lib/video";
 import { ProductVideo } from "../components/video";
 
 const id = "M7lc1UVf-VE";
 const embed = `https://www.youtube-nocookie.com/embed/${id}`;
+
+test("feature video previews autoplay muted, loop, and expose no controls", () => {
+  const markup = renderToStaticMarkup(
+    createElement(ProductVideo, {
+      url: "https://media.example/feature.mp4",
+      preview: true,
+    }),
+  );
+  for (const attribute of [
+    'autoPlay=""',
+    'muted=""',
+    'loop=""',
+    'playsInline=""',
+    'disablePictureInPicture=""',
+    'disableRemotePlayback=""',
+  ])
+    assert.ok(markup.includes(attribute), attribute);
+  assert.ok(!markup.includes('controls=""'));
+  const youtube = renderToStaticMarkup(
+    createElement(ProductVideo, {
+      url: `https://youtu.be/${id}`,
+      preview: true,
+    }),
+  );
+  for (const parameter of [
+    "autoplay=1",
+    "mute=1",
+    "loop=1",
+    "controls=0",
+    `playlist=${id}`,
+  ])
+    assert.ok(youtube.includes(parameter));
+});
+
+test("feature video fields accept playable HTTPS videos and reject unsupported or unsafe links", () => {
+  for (const url of [
+    `https://youtu.be/${id}`,
+    "https://media.example/video.mp4?token=abc",
+    "https://media.example/video.webm#t=1",
+  ])
+    assert.ok(isProductVideoUrl(url));
+  for (const url of [
+    "",
+    "https://",
+    "http://media.example/video.mp4",
+    "https://media.example/image.png",
+    "https://user:secret@media.example/video.mp4",
+    "javascript:alert(1)",
+  ])
+    assert.equal(isProductVideoUrl(url), false);
+});
 
 test("recognizes watch, shared, mobile, Shorts, live, and embed links", () => {
   for (const url of [
