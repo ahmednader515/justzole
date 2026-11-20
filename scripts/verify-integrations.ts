@@ -47,29 +47,53 @@ async function main() {
         200,
         route,
       );
-    const png = Buffer.from(
-      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a6GkAAAAASUVORK5CYII=",
-      "base64",
-    );
-    const f = new FormData();
-    f.set(
-      "file",
-      new File([png], "integration-test.png", { type: "image/png" }),
-    );
-    const response = await fetch(base + "/api/upload", {
-      method: "POST",
-      headers: { cookie, origin: base },
-      body: f,
-    });
+    const sign = (type: string, size: number) =>
+      fetch(base + "/api/upload", {
+        method: "POST",
+        headers: { cookie, origin: base, "content-type": "application/json" },
+        body: JSON.stringify({ type, size }),
+      });
+    const response = await sign("image/png", 100);
     const result = await response.json();
     assert.equal(
       response.status,
       400,
       "Product image uploads must be rejected",
     );
-    assert.equal(result.error, "Choose an MP4 or WebM video up to 25 MB.");
+    assert.equal(result.error, "Choose an MP4 or WebM video up to 1 GB.");
+    assert.equal((await sign("video/mp4", 1024 ** 3 + 1)).status, 400);
+    const video = Buffer.alloc(30 * 1024 * 1024);
+    const ticketResponse = await sign("video/mp4", video.length);
+    assert.equal(ticketResponse.status, 200);
+    const ticket = await ticketResponse.json();
+    objectKey = new URL(ticket.url).pathname.split("/").slice(-2).join("/");
+    const preflight = await fetch(ticket.uploadUrl, {
+      method: "OPTIONS",
+      headers: {
+        Origin: "https://justzole.com",
+        "Access-Control-Request-Method": "PUT",
+        "Access-Control-Request-Headers": "content-type",
+      },
+    });
+    assert.ok(preflight.ok, "Production upload CORS preflight");
+    assert.equal(
+      preflight.headers.get("access-control-allow-origin"),
+      "https://justzole.com",
+    );
+    const uploaded = await fetch(ticket.uploadUrl, {
+      method: "PUT",
+      headers: { "content-type": "video/mp4" },
+      body: video,
+    });
+    assert.ok(uploaded.ok, `Direct 30 MB upload: ${uploaded.status}`);
+    const publicVideo = await fetch(ticket.url, { method: "HEAD" });
+    assert.equal(publicVideo.status, 200);
+    assert.equal(
+      Number(publicVideo.headers.get("content-length")),
+      video.length,
+    );
     console.log(
-      "PASS: public routes, anonymous admin redirects, protected uploads, admin pages, hashed admin password, and product image upload rejection.",
+      "PASS: public/admin routes, protected signing, file validation, production CORS, and direct 30 MB R2 upload/public delivery. Temporary upload removed.",
     );
   } finally {
     await db.session.deleteMany({ where: { id } });

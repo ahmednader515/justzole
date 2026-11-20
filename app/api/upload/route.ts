@@ -1,5 +1,7 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { currentUser } from "@/lib/auth";
+import { videoUploadSchema } from "@/lib/upload";
 import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
@@ -8,62 +10,83 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   if (request.headers.get("origin") !== new URL(request.url).origin)
     return NextResponse.json({ error: "Invalid origin" }, { status: 403 });
-  if (Number(request.headers.get("content-length") || 0) > 26 * 1024 * 1024)
+  // Only metadata crosses the application; video bytes go straight to R2.
+  if (Number(request.headers.get("content-length") || 0) > 8192)
     return NextResponse.json(
-      { error: "Maximum upload is 25 MB." },
+      { error: "Send video metadata only." },
       { status: 413 },
     );
-  let data: FormData;
+  let data: unknown;
   try {
-    data = await request.formData();
+    const body = await request.text();
+    if (body.length > 8192) throw new Error("Metadata too large");
+    data = JSON.parse(body);
   } catch {
     return NextResponse.json(
       { error: "Invalid upload request." },
       { status: 400 },
     );
   }
-  const file = data.get("file");
-  const types: Record<string, string> = {
-    "video/mp4": "mp4",
-    "video/webm": "webm",
-  };
-  if (
-    !(file instanceof File) ||
-    !types[file.type] ||
-    !file.size ||
-    file.size > 25 * 1024 * 1024
-  )
+  const parsed = videoUploadSchema.safeParse(data);
+  if (!parsed.success)
     return NextResponse.json(
-      { error: "Choose an MP4 or WebM video up to 25 MB." },
+      { error: "Choose an MP4 or WebM video up to 1 GB." },
       { status: 400 },
     );
+  const {
+    R2_ACCOUNT_ID,
+    R2_ACCESS_KEY_ID,
+    R2_SECRET_ACCESS_KEY,
+    R2_BUCKET_NAME,
+    R2_PUBLIC_URL,
+  } = process.env;
+  if (
+    !R2_ACCOUNT_ID ||
+    !R2_ACCESS_KEY_ID ||
+    !R2_SECRET_ACCESS_KEY ||
+    !R2_BUCKET_NAME ||
+    !R2_PUBLIC_URL
+  )
+    return NextResponse.json(
+      {
+        error:
+          "Video storage is not configured. Check the R2 environment variables.",
+      },
+      { status: 503 },
+    );
   try {
-    const key = `products/${crypto.randomUUID()}.${types[file.type]}`;
+    const { type, size } = parsed.data;
+    const key = `products/${crypto.randomUUID()}.${type === "video/mp4" ? "mp4" : "webm"}`;
     const s3 = new S3Client({
       region: "auto",
-      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+      endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
       credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+        accessKeyId: R2_ACCESS_KEY_ID,
+        secretAccessKey: R2_SECRET_ACCESS_KEY,
       },
     });
-    await s3.send(
+    const uploadUrl = await getSignedUrl(
+      s3,
       new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME!,
+        Bucket: R2_BUCKET_NAME,
         Key: key,
-        Body: Buffer.from(await file.arrayBuffer()),
-        ContentType: file.type,
-        CacheControl: "public, max-age=31536000, immutable",
+        ContentType: type,
+        ContentLength: size,
       }),
+      {
+        expiresIn: 1800,
+        signableHeaders: new Set(["content-type", "content-length"]),
+      },
     );
-    return NextResponse.json({
-      url: `${process.env.R2_PUBLIC_URL!.replace(/\/$/, "")}/${key}`,
-    });
+    return NextResponse.json(
+      { uploadUrl, url: `${R2_PUBLIC_URL.replace(/\/$/, "")}/${key}` },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch {
     return NextResponse.json(
       {
         error:
-          "Upload failed. Check Cloudflare R2 configuration and bucket permissions.",
+          "Could not prepare the upload. Check Cloudflare R2 configuration.",
       },
       { status: 502 },
     );

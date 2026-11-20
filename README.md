@@ -2,7 +2,7 @@
 
 Product discounts: set **Discount (%)** in the product editor (0 disables it). The storefront shows the original price, the discounted price, and the percentage off. Catalog, product detail, and search structured data use the same calculation. For an existing database, run `npx prisma db execute --file prisma/patches/add-product-discount.sql` followed by `npx prisma generate` before deploying this version. This additive patch preserves existing products and sales.
 
-Feature videos: open **Admin → Homepage → Product collection** to upload each of the three feature videos (MP4 or WebM, up to 25 MB) or paste a YouTube / hosted video URL. Edit each title and caption there too. Saving waits for uploads to finish. The public feature previews autoplay muted, loop, and hide controls; uploads retain their source audio track but play silently on the site.
+Feature videos: open **Admin → Homepage → Product collection** to upload each of the three feature videos (MP4 or WebM, up to 1 GB) or paste a YouTube / hosted video URL. Edit each title and caption there too. Saving waits for uploads to finish. The public feature previews autoplay muted, loop, and hide controls; uploads retain their source audio track but play silently on the site.
 
 Search setup: the canonical public origin defaults to `https://justzole.com`; set `SITE_URL` when changing domains. The home, catalog, and real published product pages include page-specific search/social metadata. `/robots.txt` allows public search crawlers, including AI search crawlers, and advertises `/sitemap.xml`. The sitemap updates from published products and excludes demo listings. Demo product pages, sign-in, registration, accounts, and admin pages are marked noindex. Product structured data uses listed prices and availability only; sample prices and unconfirmed preorders are not advertised as offers.
 
@@ -33,7 +33,7 @@ Use `.env.example` as the configuration reference; keep `.env` private. The supp
 - Prisma Studio: `npm run db:studio` or `npx prisma studio`
 - Production: `npm run build`, then `npm start`
 - Type checking: `npm run typecheck`
-- Integration check while the dev server is running: `npm run test:integrations` (creates and removes a temporary R2 image and session).
+- Integration check while the dev server is running: `npm run test:integrations` (creates and removes a temporary 30 MB R2 upload and session).
 
 ## Features
 
@@ -51,9 +51,9 @@ Authentication uses opaque random session tokens in HTTP-only, same-site cookies
 
 ## Cloudflare R2
 
-Configure an R2 API token with object read/write permission limited to your bucket. `R2_PUBLIC_URL` must be a public R2 domain or custom bucket domain. Uploads are relayed through an authenticated same-origin API route, so browser CORS configuration is unnecessary. Supported formats: JPG, PNG, WebP, GIF, MP4, WebM; maximum 25 MB per file. Larger videos can be hosted externally and linked. YouTube links are rendered in a privacy-enhanced embed; other video URLs open as external showcases when they are not direct MP4/WebM files.
+Configure an R2 API token with object read/write permission limited to your bucket. `R2_PUBLIC_URL` must be a public R2 domain or custom bucket domain. Uploads go directly from the browser to R2 using a short-lived URL issued only to administrators. This bypasses the hosting function request-body limit. Supported formats: MP4 and WebM; maximum 1 GB per video. The editor shows upload progress and saves the URL only after R2 confirms success. Larger videos can be hosted externally and linked. YouTube links are rendered in a privacy-enhanced embed; other video URLs open as external showcases when they are not direct MP4/WebM files.
 
-Media credentials remain server-side. Replacing/deleting a product does not delete R2 objects, so older references remain safe; clean up unused objects through your Cloudflare dashboard when needed.
+Configure bucket CORS with AllowedOrigins for https://justzole.com, https://www.justzole.com, https://justzole.vercel.app, and http://localhost:3000; AllowedMethods PUT, GET, HEAD; AllowedHeaders Content-Type; ExposeHeaders ETag; MaxAgeSeconds 3600. These origins are configured on the current bucket; add any new deployment origin before uploading there. Signing URLs expire after 30 minutes and bind the video type and size. Media credentials remain server-side. Replacing/deleting a product does not delete R2 objects, so older references remain safe; clean up unused objects through your Cloudflare dashboard when needed.
 
 ## Discord source data
 
