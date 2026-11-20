@@ -12,7 +12,6 @@ type Message = {
     title?: string;
     description?: string;
     url?: string;
-    image?: { url: string };
     video?: { url: string };
   }[];
 };
@@ -81,9 +80,6 @@ async function main() {
           .join("\n\n")
           .trim();
         if (!text && !m.attachments.length) continue;
-        const image =
-          m.attachments.find((a) => a.content_type?.startsWith("image/"))
-            ?.url || m.embeds.find((e) => e.image)?.image?.url;
         const video =
           m.attachments.find((a) => a.content_type?.startsWith("video/"))
             ?.url ||
@@ -107,7 +103,6 @@ async function main() {
               "Media imported from Discord. Add product details before publishing.",
             game: "Needs review",
             category: "Scripts",
-            imageUrl: image,
             videoUrl: video,
             features: [],
             published: false,

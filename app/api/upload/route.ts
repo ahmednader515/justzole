@@ -24,10 +24,6 @@ export async function POST(request: Request) {
   }
   const file = data.get("file");
   const types: Record<string, string> = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp",
-    "image/gif": "gif",
     "video/mp4": "mp4",
     "video/webm": "webm",
   };
@@ -38,7 +34,7 @@ export async function POST(request: Request) {
     file.size > 25 * 1024 * 1024
   )
     return NextResponse.json(
-      { error: "Choose a JPG, PNG, WebP, GIF, MP4 or WebM up to 25 MB." },
+      { error: "Choose an MP4 or WebM video up to 25 MB." },
       { status: 400 },
     );
   try {

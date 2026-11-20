@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Crosshair, Play, Code2 } from "lucide-react";
+import { Crosshair, Code2 } from "lucide-react";
+import { ProductVideo } from "./video";
 import { defaultHomepageContent } from "@/lib/homepage-defaults";
 const defaultCopy = defaultHomepageContent().products.text;
 export type CatalogProduct = {
@@ -11,7 +12,6 @@ export type CatalogProduct = {
   category: string;
   price: string | null;
   currency: string;
-  imageUrl: string | null;
   videoUrl: string | null;
   status: string;
   featured: boolean;
@@ -26,10 +26,10 @@ export function ProductCard({
 }) {
   const text = { ...defaultCopy, ...copy };
   return (
-    <Link href={`/products/${p.slug}`} className="product-card">
+    <article className="product-card">
       <div className="product-art">
-        {p.imageUrl ? (
-          <img src={p.imageUrl} alt={p.title} loading="lazy" />
+        {p.videoUrl ? (
+          <ProductVideo url={p.videoUrl} title={`${p.title} preview`} preview />
         ) : (
           <div className="product-placeholder">
             <Crosshair size={90} strokeWidth={0.65} />
@@ -43,11 +43,6 @@ export function ProductCard({
               ? text.soldOut
               : text.comingSoon}
         </span>
-        {p.videoUrl && (
-          <span className="video-badge">
-            <Play size={12} fill="currentColor" /> {text.cardVideo}
-          </span>
-        )}
       </div>
       <div className="product-body">
         <div className="product-meta">
@@ -56,7 +51,9 @@ export function ProductCard({
             <Code2 size={13} /> {p.category}
           </span>
         </div>
-        <h3>{p.title}</h3>
+        <h3>
+          <Link href={`/products/${p.slug}`}>{p.title}</Link>
+        </h3>
         <p>{p.description}</p>
         <div className="product-card-bottom">
           <strong>
@@ -68,11 +65,11 @@ export function ProductCard({
               text.cardPricing
             )}
           </strong>
-          <span>
+          <Link href={`/products/${p.slug}`}>
             {text.cardView} <Crosshair size={15} />
-          </span>
+          </Link>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }

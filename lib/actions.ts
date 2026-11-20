@@ -80,7 +80,6 @@ const productSchema = z.object({
   category: z.string().trim().min(2).max(80),
   price: z.union([z.literal(""), z.coerce.number().min(0).max(9999999999)]),
   currency: z.string().regex(/^[A-Z]{3}$/),
-  imageUrl: safeUrl,
   videoUrl: safeUrl,
   discordUrl: safeUrl.refine(
     (v) => !v || ["discord.com", "discord.gg"].includes(new URL(v).hostname),
@@ -93,10 +92,7 @@ export async function saveProduct(
   form: FormData,
 ): Promise<FormState> {
   await requireAdmin();
-  if (
-    form.get("imageUrlUploading") === "yes" ||
-    form.get("videoUrlUploading") === "yes"
-  )
+  if (form.get("videoUrlUploading") === "yes")
     return { error: "Wait for media uploads to finish before saving." };
   const result = productSchema.safeParse(Object.fromEntries(form));
   if (!result.success)
@@ -109,7 +105,6 @@ export async function saveProduct(
   const data = {
     ...values,
     price: price === "" ? null : price,
-    imageUrl: values.imageUrl || null,
     videoUrl: values.videoUrl || null,
     discordUrl: values.discordUrl || null,
     features: String(form.get("features") || "")

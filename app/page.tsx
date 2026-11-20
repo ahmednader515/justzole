@@ -6,12 +6,11 @@ import {
   Headphones,
   MousePointer2,
   Gamepad2,
-  ChevronRight,
 } from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DiscordIcon } from "@/components/icons";
-import { Catalog } from "@/components/catalog";
+import { ProductShowcase } from "@/components/product-showcase";
 import { getCatalog } from "@/lib/products";
 import { getHomepageContent } from "@/lib/homepage";
 import { HeroMotion } from "@/components/hero-motion";
@@ -19,8 +18,17 @@ import { Reviews } from "@/components/reviews";
 import { ServerRules } from "@/components/server-rules";
 import { HowToUse } from "@/components/how-to-use";
 import { AccentText } from "@/components/accent-text";
+import { ProductQuestions } from "@/components/product-questions";
+import { CombatFeatures } from "@/components/combat-features";
+import { ControllerSupport } from "@/components/controller-support";
+import { pageMetadata, siteDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+export const metadata = pageMetadata(
+  "For Honor Scripts & Hacks",
+  siteDescription,
+  "/",
+);
 
 export default async function Home() {
   const content = await getHomepageContent();
@@ -117,24 +125,20 @@ export default async function Home() {
             </div>
           </div>
         )}
-        {content.products.visible && (
-          <section id="products" className="container section">
-            <div className="section-heading">
-              <div>
-                <div className="eyebrow">{collection.eyebrow}</div>
-                <h2>
-                  <AccentText text={collection.title} />
-                </h2>
-                <p>{collection.description}</p>
-              </div>
-              <Link className="subtle-link" href="/products">
-                {collection.viewAll}
-                <ChevronRight size={17} />
-              </Link>
-            </div>
-            <Catalog products={products} compact copy={collection} />
-          </section>
+        {content.combatFeatures.visible && (
+          <CombatFeatures text={content.combatFeatures.text} />
         )}
+        {content.products.visible && (
+          <ProductShowcase
+            products={products}
+            text={collection}
+            brand={content.navigation.text}
+          />
+        )}
+        {content.controllers.visible && (
+          <ControllerSupport text={content.controllers.text} />
+        )}
+        <ProductQuestions />
         {content.howItWorks.visible && (
           <section id="how-it-works" className="how-section">
             <div className="container">

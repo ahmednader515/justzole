@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import { Check, ShieldCheck, MessageCircle } from "lucide-react";
 import { db } from "@/lib/db";
@@ -6,20 +8,68 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DiscordIcon } from "@/components/icons";
 import { ProductVideo } from "@/components/video";
+import { StructuredData } from "@/components/structured-data";
+import {
+  absoluteUrl,
+  isDemoProduct,
+  pageMetadata,
+  productStructuredData,
+} from "@/lib/seo";
 export const dynamic = "force-dynamic";
+const getProduct = cache(async (slug: string) =>
+  db.product.findFirst({ where: { slug, published: true } }),
+);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  if (!product) notFound();
+  return {
+    ...pageMetadata(
+      `${product.title} — ${product.game} ${product.category}`,
+      product.description.replace(/\s+/g, " ").trim().slice(0, 160),
+      `/products/${encodeURIComponent(product.slug)}`,
+    ),
+    ...(isDemoProduct(product)
+      ? { robots: { index: false, follow: true } }
+      : {}),
+  };
+}
 export default async function Product({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const p = await db.product.findFirst({
-    where: { slug, published: true },
-    include: { sales: { select: { quantity: true } } },
-  });
+  const p = await getProduct(slug);
   if (!p) notFound();
   return (
     <>
+      {!isDemoProduct(p) && <StructuredData data={productStructuredData(p)} />}
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Products",
+              item: absoluteUrl("/products"),
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: p.title,
+              item: absoluteUrl(`/products/${encodeURIComponent(p.slug)}`),
+            },
+          ],
+        }}
+      />
       <Header />
       <main className="container section">
         <div className="breadcrumbs">
@@ -30,24 +80,14 @@ export default async function Product({
         <div className="product-detail">
           <div>
             <div className="detail-art">
-              {p.imageUrl ? (
-                <img src={p.imageUrl} alt={p.title} />
+              {p.videoUrl ? (
+                <ProductVideo url={p.videoUrl} title={`${p.title} preview`} />
               ) : (
                 <div className="detail-placeholder">
                   Z<span>{p.game}</span>
                 </div>
               )}
             </div>
-            {p.videoUrl && (
-              <div className="panel">
-                <h3>
-                  {p.slug.startsWith("demo-for-honor-")
-                    ? "For Honor trailer · demo media"
-                    : "See it in action"}
-                </h3>
-                <ProductVideo url={p.videoUrl} />
-              </div>
-            )}
           </div>
           <div className="detail-copy">
             <div className="eyebrow">

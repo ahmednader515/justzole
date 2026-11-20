@@ -62,13 +62,14 @@ async function main() {
       body: f,
     });
     const result = await response.json();
-    assert.equal(response.status, 200, result.error || "R2 upload");
-    objectKey = "products/" + result.url.split("/products/")[1];
-    const media = await fetch(result.url);
-    assert.equal(media.status, 200, "Public R2 image must load");
-    assert.ok(media.headers.get("content-type")?.startsWith("image/"));
+    assert.equal(
+      response.status,
+      400,
+      "Product image uploads must be rejected",
+    );
+    assert.equal(result.error, "Choose an MP4 or WebM video up to 25 MB.");
     console.log(
-      "PASS: public routes, anonymous admin redirects, protected uploads, admin pages, hashed admin password, R2 upload and public image delivery.",
+      "PASS: public routes, anonymous admin redirects, protected uploads, admin pages, hashed admin password, and product image upload rejection.",
     );
   } finally {
     await db.session.deleteMany({ where: { id } });

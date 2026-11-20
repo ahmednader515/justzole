@@ -1,5 +1,9 @@
 # Just Zole
 
+Search setup: the canonical public origin defaults to `https://justzole.vercel.app`; set `SITE_URL` when changing domains. The home, catalog, and real published product pages include page-specific search/social metadata. `/robots.txt` allows public search crawlers, including AI search crawlers, and advertises `/sitemap.xml`. The sitemap updates from published products and excludes demo listings. Demo product pages, sign-in, registration, accounts, and admin pages are marked noindex. Product structured data uses listed prices and availability only; sample prices and unconfirmed preorders are not advertised as offers.
+
+After deploying, verify the domain in Google Search Console and Bing Webmaster Tools, then submit `/sitemap.xml`. Optional `GOOGLE_SITE_VERIFICATION` and `BING_SITE_VERIFICATION` environment variables add the corresponding ownership meta tags. Replace demo listings with real product information before expecting product pages to be indexed. Search or AI answer placement is not guaranteed.
+
 A black-and-red product showcase built with Next.js App Router, React, TypeScript, Prisma 7, Neon PostgreSQL, and Cloudflare R2. Purchases happen on Discord; there is no checkout or payment processing.
 
 ## Run locally
@@ -29,7 +33,7 @@ Use `.env.example` as the configuration reference; keep `.env` private. The supp
 
 ## Features
 
-Optional For Honor demo products can be added with `npm run db:seed:demo`. These published listings are explicitly marked “Demo” and contain sample USD prices and fictional features, with no fabricated sales. Add official game screenshots and YouTube trailers with `npm run db:demo:media`; this uploads six screenshots to Cloudflare R2 and updates only the known demo slugs with sample USD prices. The videos are official game trailers, not script demonstrations. Local image backups and source attribution are saved in `artifacts/demo-products/`. Products remain editable and deletable through the dashboard. The initial demo seed skips existing slugs and preserves owner edits; the media command intentionally updates demo media, descriptions, and prices.
+Two optional For Honor demo products can be added with `npm run db:seed:demo`. These listings are explicitly marked “Demo” and contain sample USD prices and fictional features, with no fabricated sales. Update their YouTube trailers with `npm run db:demo:media`. The videos are official game trailers, not script demonstrations. Products remain editable and deletable through the dashboard. The seed skips existing slugs and preserves owner edits; the media command updates only the two known demo video URLs.
 
 New products default to USD in both Prisma and the product editor. Existing non-demo products and recorded sales retain their original currencies.
 
@@ -37,7 +41,7 @@ Manage homepage content at `/admin/homepage`: edit all section headings, body te
 
 The homepage includes customer reviews managed at `/admin/reviews`. Administrators can add, edit, delete, publish/unpublish, and order reviews. The three supplied testimonials are seeded with anonymous “Community member” attribution; no star ratings or reviewer identities are invented. Re-running the seed preserves edits to existing seeded reviews.
 
-Visitors can search products, filter by category/game, sort, view features and media, and follow tracked links to Discord. Users can register, sign in, sign out, and view their account. Admins can create, edit, publish, feature, mark availability, or delete products; upload images and videos; record sale quantities and prices; search registered accounts; and view 7/30/90-day sales charts, revenue by currency, top products, registrations, and outbound Discord clicks. Clicks are not unique visitors, and they do not imply a completed purchase. Chart dates use UTC. Deleting a product deletes its sale records after confirmation.
+Visitors can search products, filter by category/game, sort, view features and media, and follow tracked links to Discord. Users can register, sign in, sign out, and view their account. Admins can create, edit, publish, feature, mark availability, or delete products; upload MP4 and WebM videos; record sale quantities and prices; search registered accounts; and view 7/30/90-day sales charts, revenue by currency, top products, registrations, and outbound Discord clicks. Clicks are not unique visitors, and they do not imply a completed purchase. Chart dates use UTC. Deleting a product deletes its sale records after confirmation.
 
 Authentication uses opaque random session tokens in HTTP-only, same-site cookies. Only SHA-256 token digests are stored in PostgreSQL, sessions expire after seven days, and production cookies require HTTPS. Each protected page, server mutation, and media upload checks the administrator role. Registration always creates a regular user. Database-backed authentication throttling limits repeated attempts; trusted deployments should configure their reverse proxy to overwrite `x-forwarded-for`.
 

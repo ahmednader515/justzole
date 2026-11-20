@@ -3,7 +3,6 @@ import { useActionState, useState } from "react";
 import { Upload, LoaderCircle } from "lucide-react";
 import { saveProduct } from "@/lib/actions";
 import { ProductVideo } from "./video";
-import { getYouTubeEmbedUrl } from "@/lib/video";
 type EditableProduct = {
   id: string;
   title: string;
@@ -12,7 +11,6 @@ type EditableProduct = {
   category: string;
   price: string | null;
   currency: string;
-  imageUrl: string | null;
   videoUrl: string | null;
   discordUrl: string | null;
   status: string;
@@ -20,17 +18,7 @@ type EditableProduct = {
   published: boolean;
   features: string[];
 };
-function MediaField({
-  name,
-  label,
-  initial,
-  accept,
-}: {
-  name: string;
-  label: string;
-  initial: string;
-  accept: string;
-}) {
+function VideoField({ initial }: { initial: string }) {
   const [url, setUrl] = useState(initial),
     [uploading, setUploading] = useState(false),
     [error, setError] = useState("");
@@ -57,20 +45,18 @@ function MediaField({
   return (
     <div className="media-field">
       <label>
-        {label}
+        Video preview
         <input
           type="url"
-          name={name}
+          name="videoUrl"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://…"
         />
       </label>
-      {name === "videoUrl" && (
-        <p className="field-help">
-          Paste a YouTube link, or upload an MP4 or WebM video.
-        </p>
-      )}
+      <p className="field-help">
+        Paste a YouTube link, or upload an MP4 or WebM video.
+      </p>
       <label className="upload-zone">
         {uploading ? (
           <LoaderCircle size={20} className="spin" />
@@ -85,7 +71,7 @@ function MediaField({
         <small>Up to 25 MB, or paste a hosted URL above</small>
         <input
           type="file"
-          accept={accept}
+          accept="video/mp4,video/webm"
           disabled={uploading}
           onChange={(e) => upload(e.target.files?.[0])}
         />
@@ -95,15 +81,10 @@ function MediaField({
           {error}
         </p>
       )}
-      {name === "imageUrl" && url && (
-        <img className="media-preview" src={url} alt="Product image preview" />
-      )}
-      {name === "videoUrl" && getYouTubeEmbedUrl(url) && (
-        <ProductVideo url={url} />
-      )}
+      {url && <ProductVideo url={url} />}
       <input
         type="hidden"
-        name={`${name}Uploading`}
+        name="videoUrlUploading"
         value={uploading ? "yes" : "no"}
       />
     </div>
@@ -215,19 +196,8 @@ export function ProductForm({ product: p }: { product?: EditableProduct }) {
         </section>
         <div>
           <section className="panel">
-            <h2>Product media</h2>
-            <MediaField
-              name="imageUrl"
-              label="Cover image"
-              initial={p?.imageUrl || ""}
-              accept="image/jpeg,image/png,image/webp,image/gif"
-            />
-            <MediaField
-              name="videoUrl"
-              label="Video showcase"
-              initial={p?.videoUrl || ""}
-              accept="video/mp4,video/webm"
-            />
+            <h2>Product video</h2>
+            <VideoField initial={p?.videoUrl || ""} />
           </section>
           <section className="panel">
             <h2>Visibility & availability</h2>

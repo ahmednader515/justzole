@@ -64,6 +64,43 @@ export const homepageDefinitions = {
       fourth: field("Fourth benefit", "Community comes first"),
     },
   },
+  combatFeatures: {
+    label: "For Honor features",
+    fields: {
+      eyebrow: field("Eyebrow", "BUILT FOR THE BATTLE"),
+      title: field("Heading", "Every move. Your advantage."),
+      description: field(
+        "Description",
+        "For Honor tools for the moments that decide a fight. Explore options for combat, defense, and movement.",
+        true,
+      ),
+      link: field("Products link label", "Explore the scripts"),
+      parryTitle: field("Parry title", "Parry"),
+      parryDescription: field(
+        "Parry description",
+        "Meet incoming attacks with parry assistance and configurable timing.",
+        true,
+      ),
+      blockTitle: field("Block title", "Block"),
+      blockDescription: field(
+        "Block description",
+        "Stay on guard with directional blocking support when the pressure builds.",
+        true,
+      ),
+      deflectTitle: field("Deflect title", "Deflect"),
+      deflectDescription: field(
+        "Deflect description",
+        "Turn defense into an opening with deflect support for compatible characters.",
+        true,
+      ),
+      dodgeTitle: field("Dodge title", "Dodge"),
+      dodgeDescription: field(
+        "Dodge description",
+        "Create room to respond with movement assistance for regular and charged attacks.",
+        true,
+      ),
+    },
+  },
   products: {
     label: "Product collection",
     fields: {
@@ -74,6 +111,31 @@ export const homepageDefinitions = {
         "Explore the collection. Find your fit. Make it yours on Discord.",
       ),
       viewAll: field("View all link", "View all products"),
+      spotlightSlug: field(
+        "Showcased product slug (blank uses the first published product)",
+        "",
+      ),
+      firstVideoUrl: field("Feature 1 video URL", ""),
+      firstVideoTitle: field("Feature 1 title", "Parry"),
+      firstVideoDescription: field(
+        "Feature 1 caption",
+        "Parry assistance with configurable timing.",
+        true,
+      ),
+      secondVideoUrl: field("Feature 2 video URL", ""),
+      secondVideoTitle: field("Feature 2 title", "Deflect"),
+      secondVideoDescription: field(
+        "Feature 2 caption",
+        "Turn a defensive move into an opening.",
+        true,
+      ),
+      thirdVideoUrl: field("Feature 3 video URL", ""),
+      thirdVideoTitle: field("Feature 3 title", "Dodge"),
+      thirdVideoDescription: field(
+        "Feature 3 caption",
+        "Movement assistance when timing matters.",
+        true,
+      ),
       allProducts: field("All products filter", "All products"),
       search: field("Search placeholder", "Search your next advantage..."),
       allGames: field("All games filter", "All games"),
@@ -109,6 +171,24 @@ export const homepageDefinitions = {
       available: field("Available status", "AVAILABLE"),
       soldOut: field("Sold out status", "SOLD OUT"),
       comingSoon: field("Coming soon status", "COMING SOON"),
+    },
+  },
+  controllers: {
+    label: "Controller compatibility",
+    fields: {
+      eyebrow: field("Eyebrow", "YOUR CONTROLLER. YOUR PLAYSTYLE."),
+      title: field("Heading", "Built for the way you play."),
+      description: field(
+        "Description",
+        "Play your way. Our For Honor scripts support all kinds of controllers, from PlayStation and Xbox to GameSir and beyond.",
+        true,
+      ),
+      playstation: field("PlayStation label", "PlayStation"),
+      xbox: field("Xbox label", "Xbox"),
+      gamesir: field("GameSir label", "GameSir"),
+      supported: field("Compatibility badge", "Supported"),
+      footer: field("Bottom message", "One script. All kinds of controllers."),
+      supportLink: field("Support link label", "Get setup help"),
     },
   },
   howItWorks: {

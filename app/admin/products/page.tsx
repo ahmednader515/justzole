@@ -36,13 +36,9 @@ export default async function Products() {
                   <tr key={p.id}>
                     <td>
                       <div className="table-product">
-                        {p.imageUrl ? (
-                          <img src={p.imageUrl} alt="" />
-                        ) : (
-                          <span className="table-product-icon">
-                            <Package size={20} />
-                          </span>
-                        )}
+                        <span className="table-product-icon">
+                          <Package size={20} />
+                        </span>
                         <div>
                           <b>{p.title}</b>
                           <small>

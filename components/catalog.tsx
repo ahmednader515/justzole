@@ -109,7 +109,7 @@ export function Catalog({
       </div>
       {visible.length ? (
         <div className="product-grid">
-          {visible.slice(0, compact ? 6 : undefined).map((p) => (
+          {visible.slice(0, compact ? 2 : undefined).map((p) => (
             <ProductCard key={p.id} product={p} copy={text} />
           ))}
         </div>

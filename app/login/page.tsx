@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { Brand } from "@/components/icons";
 import { AuthForm } from "@/components/auth-form";
-export const metadata = { title: "Sign in" };
+export const metadata = {
+  title: "Sign in",
+  robots: { index: false, follow: true },
+};
 export default function Login() {
   return (
     <main className="auth-shell">

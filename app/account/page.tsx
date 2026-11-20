@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/auth";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+export const metadata = {
+  title: "Your account",
+  robots: { index: false, follow: false },
+};
 export default async function Account() {
   const user = await currentUser();
   if (!user) redirect("/login");
