@@ -30,9 +30,16 @@ export async function Reviews({
             <p>{text.description}</p>
           </div>
         </div>
-        <div className="reviews-grid">
-          {reviews.map((review) => (
-            <figure className="review-card" key={review.id}>
+        <div className="testimonial-spread">
+          {reviews.map((review, index) => (
+            <figure
+              className={
+                index === 0
+                  ? "testimonial testimonial-lead"
+                  : "testimonial testimonial-note"
+              }
+              key={review.id}
+            >
               <Quote className="review-quote" size={25} aria-hidden="true" />
               <blockquote>{review.content}</blockquote>
               <figcaption>

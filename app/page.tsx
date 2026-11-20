@@ -131,29 +131,38 @@ export default async function Home() {
                 </div>
                 <p>{how.description}</p>
               </div>
-              <div className="steps">
-                <article>
+              <ol className="purchase-flow">
+                <li>
+                  <span className="purchase-number" aria-hidden="true">
+                    01
+                  </span>
                   <div className="step-icon">
                     <MousePointer2 />
                   </div>
                   <h3>{how.firstTitle}</h3>
                   <p>{how.firstDescription}</p>
-                </article>
-                <article>
+                </li>
+                <li>
+                  <span className="purchase-number" aria-hidden="true">
+                    02
+                  </span>
                   <div className="step-icon">
                     <DiscordIcon size={24} />
                   </div>
                   <h3>{how.secondTitle}</h3>
                   <p>{how.secondDescription}</p>
-                </article>
-                <article>
+                </li>
+                <li>
+                  <span className="purchase-number" aria-hidden="true">
+                    03
+                  </span>
                   <div className="step-icon">
                     <Gamepad2 />
                   </div>
                   <h3>{how.thirdTitle}</h3>
                   <p>{how.thirdDescription}</p>
-                </article>
-              </div>
+                </li>
+              </ol>
             </div>
           </section>
         )}

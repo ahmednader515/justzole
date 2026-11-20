@@ -33,10 +33,13 @@ export function ServerRules({
             <p>{text.description}</p>
           </div>
         </div>
-        <div className="rules-grid">
+        <div className="policy-document">
           {groups.map(({ title, Icon, rules }, groupIndex) => (
-            <article className="rules-card" key={groupIndex}>
-              <div className="rules-card-heading">
+            <article className="policy-row" key={groupIndex}>
+              <div className="policy-heading">
+                <span className="policy-index" aria-hidden="true">
+                  0{groupIndex + 1} /
+                </span>
                 <span className="step-icon">
                   <Icon size={20} aria-hidden="true" />
                 </span>

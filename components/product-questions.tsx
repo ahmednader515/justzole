@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
 
 export function ProductQuestions() {
   return (
@@ -18,9 +19,13 @@ export function ProductQuestions() {
           </p>
         </div>
       </div>
-      <div className="product-questions-grid">
-        <article className="panel">
-          <h3>Looking for For Honor hacks?</h3>
+      <div className="question-accordion">
+        <details open>
+          <summary>
+            <span className="question-index">01</span>
+            <h3>Looking for For Honor hacks?</h3>
+            <Plus size={18} aria-hidden="true" />
+          </summary>
           <p>
             Browse the{" "}
             <Link href="/products">Just Zole For Honor script catalog</Link> to
@@ -28,24 +33,32 @@ export function ProductQuestions() {
             available video previews and ask the team which product fits your
             setup.
           </p>
-        </article>
-        <article className="panel">
-          <h3>How do I buy a For Honor script?</h3>
+        </details>
+        <details>
+          <summary>
+            <span className="question-index">02</span>
+            <h3>How do I buy a For Honor script?</h3>
+            <Plus size={18} aria-hidden="true" />
+          </summary>
           <p>
             Open a product, review its details, then use its Discord button to
             contact Just Zole. Purchases and product support are handled through
             Discord; this website does not collect payments.
           </p>
-        </article>
-        <article className="panel">
-          <h3>Where can I check compatibility and setup?</h3>
+        </details>
+        <details>
+          <summary>
+            <span className="question-index">03</span>
+            <h3>Where can I check compatibility and setup?</h3>
+            <Plus size={18} aria-hidden="true" />
+          </summary>
           <p>
             Check the features on each product page and confirm platform,
             configuration, and setup requirements with the team on Discord.
             Product details and current availability are specific to each
             listing.
           </p>
-        </article>
+        </details>
       </div>
     </section>
   );

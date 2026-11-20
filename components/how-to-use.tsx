@@ -21,29 +21,40 @@ export function HowToUse({
             <h2 id="setup-title">{text.title}</h2>
           </div>
         </div>
-        <ol className="setup-steps">
-          <li>
-            <span className="setup-number" aria-hidden="true">
-              {text.firstNumber}
+        <div className="setup-console">
+          <div className="setup-console-bar">
+            <span aria-hidden="true">
+              <i />
+              <i />
+              <i />
             </span>
-            <span className="step-icon">
-              <Play size={20} aria-hidden="true" />
-            </span>
-            <h3>{text.firstTitle}</h3>
-          </li>
-          <li>
-            <span className="setup-number" aria-hidden="true">
-              {text.secondNumber}
-            </span>
-            <span className="step-icon">
-              <Gamepad2 size={20} aria-hidden="true" />
-            </span>
-            <h3>{text.secondTitle}</h3>
-          </li>
-        </ol>
-        <p className="setup-finish">
-          <strong>{text.finish}</strong>
-        </p>
+            <span>QUICK START / FOR HONOR</span>
+            <span aria-hidden="true">_</span>
+          </div>
+          <ol className="setup-sequence">
+            <li>
+              <span className="setup-sequence-number" aria-hidden="true">
+                {text.firstNumber}
+              </span>
+              <span className="step-icon">
+                <Play size={20} aria-hidden="true" />
+              </span>
+              <h3>{text.firstTitle}</h3>
+            </li>
+            <li>
+              <span className="setup-sequence-number" aria-hidden="true">
+                {text.secondNumber}
+              </span>
+              <span className="step-icon">
+                <Gamepad2 size={20} aria-hidden="true" />
+              </span>
+              <h3>{text.secondTitle}</h3>
+            </li>
+          </ol>
+          <p className="setup-finish">
+            <strong>{text.finish}</strong>
+          </p>
+        </div>
       </div>
     </section>
   );

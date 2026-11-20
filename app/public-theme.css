@@ -733,7 +733,11 @@
 }
 @media (min-width: 801px) {
   .cyber-site .product-showcase {
-    height: min(85svh, calc(100svh - 145px));
+    height: min(680px, 75svh, calc(100svh - 145px));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+  .cyber-site .showcase-videos {
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1.15fr);
   }
 }
 @media (max-width: 1100px) {
